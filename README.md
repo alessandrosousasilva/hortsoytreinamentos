@@ -5,8 +5,8 @@ Plataforma web desenvolvida para centralizar, organizar e disponibilizar os trei
 ## 🛠️ Tecnologias Utilizadas
 
 * **HTML5:** Semântica e estruturação em página única e página de template (`index.html` e `cursos.html`).
-* **CSS3:**
-* **JavaScript (Vanilla):** 
+* **CSS3**
+* **JavaScript** 
 * **JSON:** Banco de dados estático para armazenamento de todo o conteúdo da plataforma.
 
 ## 📂 Estrutura do Projeto

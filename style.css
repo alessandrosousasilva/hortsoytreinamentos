@@ -1,0 +1,433 @@
+/* --- Variáveis de Cores --- */
+:root {
+  --cor-verde-hortsoy: #009a50; /* Um verde aproximado da sua logo */
+  --cor-verde-escuro: #00733c;
+
+  /* Cores do Modo Claro (Padrão) */
+  --fundo-pagina: #f4f7f6;
+  --fundo-card: #ffffff;
+  --texto-principal: #333333;
+  --texto-secundario: #666666;
+  --borda-card: #e0e0e0;
+}
+
+/* Cores do Modo Escuro */
+body.modo-escuro {
+  --fundo-pagina: #121212;
+  --fundo-card: #1e1e1e;
+  --texto-principal: #f4f7f6;
+  --texto-secundario: #bbbbbb;
+  --borda-card: #333333;
+}
+
+/* --- Reset --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: var(--fundo-pagina);
+  color: var(--texto-principal);
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+/* --- Cabeçalho --- */
+.cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 15%; /* Diminuí um pouco o padding (de 20px para 15px) para a barra caber melhor */
+  background-color: var(--fundo-card);
+  border-bottom: 4px solid var(--cor-verde-hortsoy); /* Cria a borda verde grossa na parte de baixo */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s;
+  gap: 20px; /* Espaço entre logo, barra e botão */
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Garante que fique por cima de todos os vídeos e PDFs */
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s,
+    backdrop-filter 0.3s;
+}
+/* O efeito de "Vidro Fosco" ao rolar a página */
+.cabecalho.efeito-rolagem {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.85
+  ); /* Fundo branco levemente transparente */
+  backdrop-filter: blur(10px); /* O desfoque mágico do fundo */
+  -webkit-backdrop-filter: blur(10px); /* Suporte para navegadores Apple */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Sombra maior para dar profundidade */
+}
+/* O mesmo efeito ajustado para as cores do Modo Escuro */
+body.modo-escuro .cabecalho.efeito-rolagem {
+  background-color: rgba(
+    30,
+    30,
+    30,
+    0.85
+  ); /* Fundo escuro levemente transparente */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* --- Área da Logo Composta --- */
+.logo-container {
+  display: flex;
+  align-items: center; /* Isso garante que a logo, a barra e os textos fiquem centralizados no mesmo eixo vertical */
+  gap: 15px;
+}
+
+.logo-container img {
+  height: 70px;
+  width: auto;
+}
+
+.separador-logo {
+  height: 55px;
+  width: 2px;
+  background-color: var(--borda-card);
+}
+
+/* Caixa que agrupa os títulos */
+.titulos-plataforma {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* O texto 'Treinamentos' */
+.texto-treinamentos {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--texto-principal);
+  letter-spacing: -0.5px;
+  line-height: 1; /* Reduzido para 1 para remover espaços invisíveis no topo/fundo da fonte */
+  margin-bottom: 4px; /* Espaçamento exato entre o título e o subtítulo */
+}
+
+/* O texto 'Grupo HortSoy' */
+.texto-subtitulo {
+  font-size: 0.9rem;
+  font-weight: normal;
+  color: var(--texto-secundario);
+  line-height: 1; /* Remove espaços invisíveis */
+  margin-top: 0;
+  margin-top: 2px;
+}
+
+.btn-tema {
+  background-color: transparent;
+  border: 2px solid var(--cor-verde-hortsoy);
+  color: var(--cor-verde-hortsoy);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.btn-tema:hover {
+  background-color: var(--cor-verde-hortsoy);
+  color: white;
+}
+
+/* --- Layout Principal --- */
+.container {
+  max-width: 1300px; /* Aumentado para dar mais espaço para os 4 blocos */
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.boas-vindas {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.boas-vindas p {
+  color: var(--texto-secundario);
+  margin-top: 10px;
+}
+
+/* --- Grid de Setores --- */
+.grid-setores {
+  display: grid;
+  /* Reduzimos de 280px para 240px para garantir que caibam 4 blocos na tela do computador */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+}
+
+.card-setor {
+  background-color: var(--fundo-card);
+  border: 1px solid var(--borda-card);
+  border-radius: 12px;
+  padding: 30px 20px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-setor:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border-color: var(--cor-verde-hortsoy);
+}
+
+.card-icone {
+  font-size: 40px;
+  margin-bottom: 15px;
+}
+
+.card-setor h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: var(--cor-verde-hortsoy);
+}
+
+.card-setor p {
+  font-size: 0.9rem;
+  color: var(--texto-secundario);
+}
+
+/* --- Barra de Pesquisa no Header --- */
+.barra-pesquisa-header {
+  flex-grow: 1; /* Faz a barra esticar e ocupar o espaço vazio do meio */
+  max-width: 400px;
+  margin: 0 150px;
+}
+
+.barra-pesquisa-header input {
+  width: 140%;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 30px;
+  background-color: var(
+    --fundo-pagina
+  ); /* Fundo um pouco mais escuro que o header para dar contraste */
+  color: var(--texto-principal);
+  outline: none;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s,
+    background-color 0.3s;
+  border: 2px solid var(--borda-card);
+  background-color: var(--fundo-card);
+}
+
+.barra-pesquisa-header input:focus {
+  border-color: var(--cor-verde-hortsoy);
+  box-shadow: 0 0 8px rgba(0, 154, 80, 0.2);
+}
+
+.barra-pesquisa-header input::placeholder {
+  color: var(--texto-secundario);
+}
+
+/* --- Página Interna de Cursos --- */
+.cabecalho-setor {
+  display: flex;
+  justify-content: space-between; /* Empurra os textos para a esquerda e a pesquisa para a direita */
+  align-items: flex-end; /* Alinha eles pela parte de baixo */
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--borda-card);
+  padding-bottom: 20px;
+  gap: 20px;
+  flex-wrap: wrap; /* Garante que não quebre no celular */
+}
+
+.info-setor h1 {
+  font-size: 2rem;
+  color: var(--cor-verde-hortsoy);
+}
+
+/* Nova barra de pesquisa interna */
+.pesquisa-setor input {
+  width: 350px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: 2px solid var(--borda-card);
+  border-radius: 30px;
+  color: var(--texto-principal);
+  outline: none;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s,
+    background-color 0.3s;
+  background-color: var(--fundo-card);
+}
+
+.pesquisa-setor input:focus {
+  border-color: var(--cor-verde-hortsoy);
+}
+
+.btn-voltar {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: var(--cor-verde-hortsoy);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.btn-voltar {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: var(--cor-verde-hortsoy);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.btn-voltar:hover {
+  color: var(--cor-verde-escuro);
+}
+
+.cabecalho-setor h1 {
+  font-size: 2rem;
+  color: var(--cor-verde-hortsoy);
+}
+
+/* --- Blocos de Cursos (Expansíveis / Acordeão) --- */
+.curso-bloco {
+  background-color: var(--fundo-card);
+  border: 1px solid var(--borda-card);
+  border-radius: 12px;
+  margin-bottom: 15px; /* Espaço entre um bloco e outro */
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.3s;
+}
+
+/* A parte clicável do bloco */
+.curso-cabecalho {
+  padding: 20px 25px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--fundo-card);
+  transition: background-color 0.2s;
+}
+
+.curso-cabecalho:hover {
+  background-color: rgba(
+    0,
+    154,
+    80,
+    0.05
+  ); /* Um fundinho verde bem claro ao passar o mouse */
+}
+
+.curso-cabecalho h3 {
+  font-size: 1.2rem;
+  margin: 0;
+  color: var(--texto-principal);
+}
+
+.icone-expansao {
+  font-size: 1.2rem;
+  color: var(--cor-verde-hortsoy);
+  transition: transform 0.3s ease; /* Animação suave para a setinha girar */
+}
+
+/* A parte que fica escondida com o vídeo e PDF */
+.curso-conteudo {
+  display: none; /* Começa escondido */
+  padding: 25px;
+  border-top: 1px solid var(--borda-card);
+  background-color: var(--fundo-pagina);
+}
+
+/* --- Lógica do Bloco Aberto --- */
+.curso-bloco.aberto .curso-conteudo {
+  display: block; /* Mostra o conteúdo quando o bloco ganha a classe 'aberto' */
+}
+
+.curso-bloco.aberto .icone-expansao {
+  transform: rotate(180deg); /* Vira a setinha para cima */
+}
+.curso-bloco.aberto {
+  border-color: var(
+    --cor-verde-hortsoy
+  ); /* Destaca a borda do curso que está sendo assistido */
+}
+
+/* Layout do Vídeo e Botão (Mantidos) */
+.video-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+.acoes-curso {
+  display: flex;
+  justify-content: flex-end;
+}
+.btn-pdf {
+  display: inline-block;
+  background-color: #e53935;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+.btn-pdf:hover {
+  background-color: #c62828;
+}
+
+/* --- Estilos para Múltiplos Vídeos e PDFs --- */
+.item-video {
+  margin-bottom: 30px; /* Dá espaço entre um vídeo e outro */
+  padding-bottom: 20px;
+  border-bottom: 1px dashed var(--borda-card); /* Linha tracejada separando as aulas */
+}
+
+/* Tira a linha tracejada do último vídeo para ficar mais limpo */
+.item-video:last-child {
+  border-bottom: none;
+  margin-bottom: 10px;
+}
+
+.item-video h4 {
+  font-size: 1.1rem;
+  color: var(--texto-principal);
+  margin-bottom: 15px;
+}
+
+/* Garante que os botões de PDF fiquem lado a lado e pulem de linha se não couber na tela */
+.acoes-curso {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 15px; /* Espaço entre os botões */
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--borda-card); /* Linha separando os vídeos da área de download */
+}

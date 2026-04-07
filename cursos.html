@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Treinamentos | HortSoy</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="modo-claro">
+
+  <header class="cabecalho">
+    <div class="logo-container">
+      <img src="assets/logos/logo-hortsoy.png" alt="Logo HortSoy" id="logo-hortsoy">
+      <div class="separador-logo"></div>
+
+      <div class="titulos-plataforma">
+        <span class="texto-treinamentos">Treinamentos</span>
+        <span class="texto-subtitulo">Grupo HortSoy</span>
+      </div>
+
+    </div>
+
+    <div class="barra-pesquisa-header" style="visibility: hidden;">
+      <input type="text" disabled>
+    </div>
+    <button id="btn-tema" class="btn-tema">🌙</button>
+  </header>
+
+  <main class="container">
+    <a href="index.html" class="btn-voltar">← Voltar para o Início</a>
+
+    <div class="cabecalho-setor">
+      <div class="info-setor">
+        <h1 id="titulo-setor">Carregando...</h1>
+        <p id="descricao-setor"></p>
+      </div>
+
+      <div class="pesquisa-setor">
+        <input type="text" id="input-pesquisa-curso" placeholder="Buscar curso, vídeo ou PDF...">
+      </div>
+    </div>
+
+    <div class="lista-cursos" id="lista-cursos">
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

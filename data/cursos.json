@@ -1,0 +1,338 @@
+[
+  {
+    "id": "financeiro",
+    "nome": "Financeiro",
+    "icone": "💰",
+    "descricao": "Pagamentos e recebimentos.",
+    "cursos": [
+      {
+        "titulo": "Fluxo de Caixa",
+        "videos": [
+          {
+            "titulo": "Lançamentos Diários",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Fluxo de Caixa",
+            "url": "assets/pdfs/financeiro/fluxo_caixa.pdf"
+          }
+        ]
+      },
+      {
+        "titulo": "Contas a Pagar e Receber",
+        "videos": [
+          {
+            "titulo": "Aula 1: Aprovação de Pagamentos",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          },
+          {
+            "titulo": "Aula 2: Emissão de Boletos",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Guia de Contas a Pagar",
+            "url": "assets/pdfs/financeiro/contas_pagar.pdf"
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "rh",
+    "nome": "Recursos Humanos",
+    "icone": "👥",
+    "descricao": "Integração, benefícios e desenvolvimento.",
+    "cursos": [
+      {
+        "titulo": "Integração Institucional HortSoy",
+        "videos": [
+          {
+            "titulo": "Nossa História e Valores",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Cultura HortSoy",
+            "url": "assets/pdfs/rh/cultura.pdf"
+          }
+        ]
+      },
+      {
+        "titulo": "Sistema de Ponto Eletrônico",
+        "videos": [
+          {
+            "titulo": "Como bater o ponto no aplicativo",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Manual do Ponto",
+            "url": "assets/pdfs/rh/manual_ponto.pdf"
+          }
+        ]
+      },
+      {
+        "titulo": "Pacote de Benefícios",
+        "videos": [
+          {
+            "titulo": "Entendendo seu Plano de Saúde",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Tabela de Coparticipação",
+            "url": "assets/pdfs/rh/coparticipacao.pdf"
+          },
+          {
+            "titulo": "Guia do Vale Alimentação",
+            "url": "assets/pdfs/rh/vale.pdf"
+          }
+        ]
+      },
+      {
+        "titulo": "Avaliação de Desempenho",
+        "videos": [
+          {
+            "titulo": "Como preencher sua autoavaliação",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Como dar Feedbacks",
+            "url": "assets/pdfs/rh/feedback.pdf"
+          }
+        ]
+      },
+      {
+        "titulo": "Solicitação de Férias",
+        "videos": [
+          {
+            "titulo": "Passo a passo",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Política de Férias",
+            "url": "assets/pdfs/rh/ferias.pdf"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "logistica",
+    "nome": "Logística e Estoque",
+    "icone": "📦",
+    "descricao": "Pedidos, lançamentos e controle de estoque.",
+    "cursos": [
+      {
+        "titulo": "Emissão de contagem diária",
+        "videos": [
+          {
+            "titulo": "Contagem diária",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Contagem Diária",
+            "url": "/assets/pdfs/logistico-e-estoque/RELATÓRIO DE CONTAGEM DIÁRIA.pdf"
+          }
+        ]
+      },
+      {
+        "titulo": "Emissão de contagem mensal",
+        "videos": [
+          {
+            "titulo": "Contagem mensal",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Contagem mensal",
+            "url": "/assets/pdfs/logistico-e-estoque/RELATÓRIO DE CONTAGEM MENSAL.pdf"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "processos",
+    "nome": "Processos e Operações",
+    "icone": "⚙️",
+    "descricao": "Padronização e melhoria contínua.",
+    "cursos": [
+      {
+        "titulo": "Módulo 1: Metodologia 5S na HortSoy",
+        "videos": [
+          {
+            "titulo": "Introdução aos 5 Sensos",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Checklist Auditoria 5S",
+            "url": "assets/pdfs/processos/auditoria_5s.pdf"
+          }
+        ]
+      },
+      {
+        "titulo": "Mapeamento de Processos",
+        "videos": [
+          {
+            "titulo": "Nossos fluxos",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ]
+      },
+      {
+        "titulo": "Não Conformidades",
+        "videos": [
+          {
+            "titulo": "Abrindo um chamado de melhoria",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Formulário de Não Conformidade",
+            "url": "assets/pdfs/processos/formulario_nc.pdf"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "contabilidade",
+    "nome": "Contabilidade",
+    "icone": "📊",
+    "descricao": "Registros fiscais e balanços.",
+    "cursos": [
+      {
+        "titulo": "Classificação de Despesas",
+        "videos": [
+          {
+            "titulo": "Despesa x Custo: Principais diferenças",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ]
+      },
+      {
+        "titulo": "Retenção de Impostos (NFs)",
+        "videos": [
+          {
+            "titulo": "Quando reter ISS e INSS",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Tabela de Alíquotas 2026",
+            "url": "assets/pdfs/contabilidade/aliquotas.pdf"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "credito",
+    "nome": "Crédito e Cobrança",
+    "icone": "🤝",
+    "descricao": "Análise de risco e recuperação de crédito.",
+    "cursos": [
+      {
+        "titulo": "Política de Concessão de Crédito",
+        "videos": [
+          {
+            "titulo": "Critérios para aprovação de novos clientes",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Matriz de Risco HortSoy",
+            "url": "assets/pdfs/credito/matriz_risco.pdf"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tecnologia",
+    "nome": "Tecnologia e Inovação",
+    "icone": "💻",
+    "descricao": "Sistemas, suporte e novas ferramentas.",
+    "cursos": [
+      {
+        "titulo": "Segurança da Informação",
+        "videos": [
+          {
+            "titulo": "Como identificar e-mails de malignosos",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          },
+          {
+            "titulo": "Criação de senhas fortes",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Política de Segurança da Informação",
+            "url": "assets/pdfs/tecnologia/politica_seguranca.pdf"
+          }
+        ]
+      },
+      {
+        "titulo": "Configuração da VPN",
+        "videos": [
+          {
+            "titulo": "Acessando a rede da empresa em Home Office",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Manual de Instalação VPN",
+            "url": "assets/pdfs/tecnologia/manual_vpn.pdf"
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "estruturadas",
+    "nome": "Operações Estruturadas",
+    "icone": "🏗️",
+    "descricao": "Projetos e parcerias estratégicas.",
+    "cursos": [
+      {
+        "titulo": "Gestão de Contratos",
+        "videos": [
+          {
+            "titulo": "Marcos contratuais e entregáveis",
+            "url": "https://www.youtube.com/embed/n48hoiCl79Y"
+          }
+        ],
+        "pdfs": [
+          {
+            "titulo": "Checklist de Leitura de Contratos",
+            "url": "assets/pdfs/estruturadas/checklist_contratos.pdf"
+          }
+        ]
+      }
+    ]
+  }
+]

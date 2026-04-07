@@ -113,15 +113,22 @@ if (listaCursos) {
         } else {
           // Passamos um 'index' (número) para criar um ID único para cada bloco
           setorEncontrado.cursos.forEach((curso, index) => {
-            // 1. Monta o HTML de todos os vídeos desse curso
+            // 1. Monta o HTML de todos os vídeos desse curso com Lazy Load
             let listaVideosHTML = "";
             if (curso.videos && curso.videos.length > 0) {
               curso.videos.forEach((video) => {
+                const videoId = obterIdYoutube(video.url);
+                // Pega a imagem de capa oficial do YouTube
+                const urlCapa = videoId
+                  ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+                  : "";
+
                 listaVideosHTML += `
                                     <div class="item-video">
                                         <h4>🎥 ${video.titulo}</h4>
-                                        <div class="video-container">
-                                            <iframe src="${video.url}" loading="lazy" allowfullscreen></iframe>
+                                        <div class="video-container lazy-video" data-url="${video.url}" onclick="carregarVideo(this)" title="Clique para reproduzir">
+                                            <img src="${urlCapa}" alt="Capa do vídeo ${video.titulo}">
+                                            <div class="btn-play">▶</div>
                                         </div>
                                     </div>
                                 `;
@@ -138,23 +145,26 @@ if (listaCursos) {
               });
             }
 
-            // 3. Junta tudo dentro do bloco expansível
+            // 3. Junta tudo dentro do bloco expansível com Acessibilidade (A11y)
             const cursoHTML = `
                             <div class="curso-bloco" id="curso-${index}">
-                                <div class="curso-cabecalho" onclick="alternarCurso('curso-${index}')">
+                                <div class="curso-cabecalho" 
+                                     onclick="alternarCurso('curso-${index}')" 
+                                     tabindex="0" 
+                                     role="button" 
+                                     aria-expanded="false" 
+                                     onkeydown="if(event.key === 'Enter' || event.key === ' ') alternarCurso('curso-${index}')">
+                                    
                                     <h3>📚 ${curso.titulo}</h3>
-                                    <span class="icone-expansao">▼</span>
+                                    <span class="icone-expansao" aria-hidden="true">▼</span>
                                 </div>
                                 <div class="curso-conteudo">
-                                    
                                     <div class="area-videos">
                                         ${listaVideosHTML}
                                     </div>
-
                                     <div class="acoes-curso">
                                         ${listaPdfsHTML}
                                     </div>
-
                                 </div>
                             </div>
                         `;
@@ -192,32 +202,53 @@ if (listaCursos) {
     });
   }
 }
-// Função global para abrir/fechar o acordeão dos cursos
-// Função global para abrir/fechar o acordeão dos cursos (Apenas UM aberto por vez)
-// Função global para abrir/fechar o acordeão (Modo Foco: esconde os outros)
-window.alternarCurso = function (idCurso) {
-  const blocoClicado = document.getElementById(idCurso);
-  const jaEstavaAberto = blocoClicado.classList.contains("aberto");
-  const todosBlocos = document.querySelectorAll(".curso-bloco");
 
-  if (jaEstavaAberto) {
-    // Se o usuário clicou no curso que JÁ estava aberto, a intenção é fechá-lo.
-    // Então fechamos ele e voltamos a mostrar a lista completa de módulos.
-    blocoClicado.classList.remove("aberto");
-    todosBlocos.forEach((bloco) => {
-      bloco.style.display = "block"; // Mostra todos novamente
-    });
-  } else {
-    // Se o usuário clicou em um módulo fechado, abrimos ele e escondemos todos os outros.
-    todosBlocos.forEach((bloco) => {
-      bloco.classList.remove("aberto"); // Garante que a animação de fechar ocorra
+// Função global para abrir/fechar o acordeão (Modo Foco)
+window.alternarCurso = function(idCurso) {
+    const blocoClicado = document.getElementById(idCurso);
+    const jaEstavaAberto = blocoClicado.classList.contains('aberto');
+    const todosBlocos = document.querySelectorAll('.curso-bloco');
 
-      if (bloco.id === idCurso) {
-        bloco.classList.add("aberto"); // Abre o que foi clicado
-        bloco.style.display = "block"; // Mantém ele visível na tela
-      } else {
-        bloco.style.display = "none"; // Oculta todos os outros
-      }
-    });
-  }
+    if (jaEstavaAberto) {
+        blocoClicado.classList.remove('aberto');
+        // Acessibilidade: avisa que fechou
+        blocoClicado.querySelector('.curso-cabecalho').setAttribute('aria-expanded', 'false'); 
+        
+        todosBlocos.forEach(bloco => {
+            bloco.style.display = 'block';
+        });
+    } else {
+        todosBlocos.forEach(bloco => {
+            bloco.classList.remove('aberto');
+            bloco.querySelector('.curso-cabecalho').setAttribute('aria-expanded', 'false');
+            
+            if (bloco.id === idCurso) {
+                bloco.classList.add('aberto');
+                bloco.style.display = 'block';
+                // Acessibilidade: avisa que abriu
+                bloco.querySelector('.curso-cabecalho').setAttribute('aria-expanded', 'true');
+            } else {
+                bloco.style.display = 'none';
+            }
+        });
+    }
+};
+
+// --- Funções de Performance ---
+
+// Extrai o ID do YouTube da URL para pegarmos a imagem de capa
+function obterIdYoutube(url) {
+    const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+    const match = url.match(regex);
+    return match ? match[1] : null;
+}
+
+// Troca a imagem de capa pelo vídeo real (Iframe)
+window.carregarVideo = function(elementoHtml) {
+    const urlOriginal = elementoHtml.getAttribute('data-url');
+    // Injeta o iframe apenas no momento do clique, com autoplay ativado
+    elementoHtml.innerHTML = `<iframe src="${urlOriginal}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    // Remove o evento de clique para não recarregar
+    elementoHtml.onclick = null;
+    elementoHtml.style.cursor = 'default';
 };

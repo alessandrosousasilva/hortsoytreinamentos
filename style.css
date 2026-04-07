@@ -486,3 +486,73 @@ body.modo-escuro .cabecalho.efeito-rolagem {
     outline-offset: 2px;
     border-radius: 8px;
 }
+
+/* =========================================
+   RESPONSIVIDADE (MOBILE & TABLETS)
+========================================= */
+@media (max-width: 768px) {
+    
+    /* 1. O Cabeçalho Principal: Quebra a pesquisa para a linha de baixo */
+    .cabecalho {
+        flex-wrap: wrap; /* Permite que os itens pulem de linha */
+        padding: 15px 20px; 
+    }
+
+    .logo-container {
+        flex-grow: 1; /* Empurra o botão de tema para a direita */
+    }
+
+    .texto-treinamentos {
+        font-size: 1.3rem; /* Diminui um pouco o título principal */
+    }
+
+    .btn-tema {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+
+    .barra-pesquisa-header {
+        order: 3; /* Força a barra a ser o 3º item (indo para baixo) */
+        width: 100%; /* Ocupa a tela toda */
+        max-width: 100%;
+        margin: 15px 0 0 0; /* Dá um espacinho em cima */
+    }
+
+    /* 2. Página Interna: Cabeçalho do Setor */
+    .cabecalho-setor {
+        flex-direction: column; /* Empilha o título e a barra de pesquisa */
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .info-setor h1 {
+        font-size: 1.6rem;
+    }
+
+    /* Conserta a barra vazando da tela */
+    .pesquisa-setor {
+        width: 100%;
+    }
+
+    .pesquisa-setor input {
+        width: 100%;
+    }
+
+    /* 3. Ajustes nos Módulos e Botões (Acordeão) */
+    .curso-cabecalho {
+        padding: 15px 20px; /* Dá um pouco mais de espaço para o texto no celular */
+    }
+
+    .curso-cabecalho h3 {
+        font-size: 1.1rem;
+    }
+    
+    .acoes-curso {
+        justify-content: center; /* Centraliza os botões */
+    }
+    
+    .btn-pdf {
+        width: 100%; /* Transforma o botão de PDF em um bloco grandão e fácil de clicar no celular */
+        text-align: center;
+    }
+}

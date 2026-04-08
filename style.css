@@ -210,7 +210,7 @@ body.modo-escuro .cabecalho.efeito-rolagem {
 .barra-pesquisa-header {
   flex-grow: 1; /* Faz a barra esticar e ocupar o espaço vazio do meio */
   max-width: 380px;
-  margin: 0 150px;
+  margin: 8px 150px;
 }
 
 .barra-pesquisa-header input {
@@ -500,12 +500,13 @@ body.modo-escuro .cabecalho.efeito-rolagem {
   .cabecalho {
     flex-wrap: wrap;
     padding: 15px; /* Reduzido o espaço lateral */
-    gap: 10px; /* Reduzido o espaço entre os elementos */
+    position: relative; /* Essencial para o botão de tema flutuar */
+    justify-content: center; /* Centraliza a logo */
   }
 
   .logo-container {
-    flex-grow: 1;
-    gap: 8px; /* Menos espaço entre a logo, a barra e o texto */
+    width: 100%; /* Força a ocupar a linha toda para garantir o centro */
+    justify-content: center; /* Centraliza os itens dentro da logo */
   }
 
   .logo-container img {
@@ -525,6 +526,9 @@ body.modo-escuro .cabecalho.efeito-rolagem {
   }
 
   .btn-tema {
+    position: absolute;
+    top: 15px;
+    right: 15px;
     padding: 6px 10px;
     font-size: 0.8rem;
   }
@@ -534,7 +538,7 @@ body.modo-escuro .cabecalho.efeito-rolagem {
     order: 3;
     width: 100%;
     max-width: 100%;
-    margin: 10px 0 0 0;
+    margin: 15px 0 0 0;
   }
 
   /* 2. Página Interna: Cabeçalho do Setor */

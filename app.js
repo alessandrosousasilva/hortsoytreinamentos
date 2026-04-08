@@ -27,7 +27,26 @@ btnTema.addEventListener("click", () => {
 });
 
 // --- Efeito do Cabeçalho Fixo ao Rolar a Página ---
-const cabecalho = document.querySelector(".cabecalho");
+// Selecionamos ambas as classes de cabeçalho possíveis
+const cabecalhoGeral = document.querySelector('.cabecalho');
+const cabecalhoCursos = document.querySelector('.cabecalho-cursos');
+
+// Função para aplicar o efeito em qualquer um dos cabeçalhos selecionados
+function aplicarEfeitoScroll(cabecalho) {
+    if (cabecalho) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                cabecalho.classList.add('efeito-rolagem');
+            } else {
+                cabecalho.classList.remove('efeito-rolagem');
+            }
+        });
+    }
+}
+
+// Aplicamos o efeito em ambos, caso existam na página
+aplicarEfeitoScroll(cabecalhoGeral);
+aplicarEfeitoScroll(cabecalhoCursos);
 
 // toda vez que a tela for rolada
 window.addEventListener("scroll", () => {

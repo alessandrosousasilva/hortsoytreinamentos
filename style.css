@@ -499,22 +499,25 @@ body.modo-escuro .cabecalho.efeito-rolagem {
   /* 1. O Cabeçalho Principal */
   .cabecalho {
     flex-wrap: wrap;
-    padding: 15px; /* Reduzido o espaço lateral */
+    padding: 8px 15px; /* Reduzido o espaço lateral */
     position: relative; /* Essencial para o botão de tema flutuar */
     justify-content: center; /* Centraliza a logo */
+  }
+  .cabecalho-cursos {
+    padding: 8px 15px; /* Padding mobile reduzido */
   }
 
   .logo-container {
     width: 100%; /* Força a ocupar a linha toda para garantir o centro */
-    justify-content: center; /* Centraliza os itens dentro da logo */
+    justify-content: left; /* Centraliza os itens dentro da logo */
   }
 
   .logo-container img {
-    height: 40px; /* Logo sutilmente menor no celular */
+    height: 70px; /* Logo mobile ligeiramente menor */
   }
 
   .separador-logo {
-    height: 30px;
+    height: 70px;
   }
 
   .texto-treinamentos {
@@ -522,7 +525,7 @@ body.modo-escuro .cabecalho.efeito-rolagem {
   }
 
   .texto-subtitulo {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 
   .btn-tema {
@@ -580,4 +583,24 @@ body.modo-escuro .cabecalho.efeito-rolagem {
     text-align: center;
     margin-top: 10px;
   }
+}
+
+/* --- Cabeçalho Simplificado (Apenas para cursos.html) --- */
+.cabecalho-cursos {
+  display: flex;
+  justify-content: center; /* Centraliza a logo e os textos */
+  align-items: center;
+  padding: 10px 5%; /* Padding reduzido para diminuir o tamanho */
+  background-color: var(--fundo-card);
+  border-bottom: 4px solid var(--cor-verde-hortsoy); /* Mantém a barra verde */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s,
+    backdrop-filter 0.3s;
+
+  /* Mantemos position: sticky, top: 0, z-index para consistência */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }

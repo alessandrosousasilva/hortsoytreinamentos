@@ -209,12 +209,12 @@ body.modo-escuro .cabecalho.efeito-rolagem {
 /* --- Barra de Pesquisa no Header --- */
 .barra-pesquisa-header {
   flex-grow: 1; /* Faz a barra esticar e ocupar o espaço vazio do meio */
-  max-width: 400px;
+  max-width: 380px;
   margin: 0 150px;
 }
 
 .barra-pesquisa-header input {
-  width: 140%;
+  width: 100%;
   padding: 12px 20px;
   font-size: 1rem;
   border-radius: 30px;

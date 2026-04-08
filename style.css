@@ -588,9 +588,9 @@ body.modo-escuro .cabecalho.efeito-rolagem {
 /* --- Cabeçalho Simplificado (Apenas para cursos.html) --- */
 .cabecalho-cursos {
   display: flex;
-  justify-content: center; /* Centraliza a logo e os textos */
+  justify-content: left; /* Centraliza a logo e os textos */
   align-items: center;
-  padding: 10px 5%; /* Padding reduzido para diminuir o tamanho */
+  padding: 15px 15%; /* Padding reduzido para diminuir o tamanho */
   background-color: var(--fundo-card);
   border-bottom: 4px solid var(--cor-verde-hortsoy); /* Mantém a barra verde */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);

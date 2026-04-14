@@ -13,7 +13,7 @@
 
   <header class="cabecalho">
     <div class="logo-container">
-      <img src="assets/logos/logo-hortsoy.png" alt="Logo HortSoy" id="logo-hortsoy">
+      <img src="assets/logos/jee-preto.png" alt="Logo jee" id="logo-hortsoy">
       <div class="separador-logo"></div>
 
       <div class="titulos-plataforma">
@@ -27,7 +27,29 @@
       <input type="text" id="input-pesquisa" placeholder="Pesquisar por setor">
     </div>
 
-    <button id="btn-tema" class="btn-tema">🌙</button>
+    <div class="acoes-header">
+      <button id="btn-tema" class="btn-tema">🌙</button>
+
+      <div class="menu-usuario">
+        <div class="avatar-usuario" id="avatar-mini" title="Meu Perfil">?</div>
+
+        <div class="dropdown-usuario" id="dropdown-perfil">
+          <div class="dropdown-topo">
+            <span class="dropdown-empresa">Grupo HortSoy</span>
+            <button id="btn-admin" class="btn-link"
+              style="display: none; color: #009a50; font-weight: bold; margin-right: 10px;">Painel Admin</button>
+            <button id="btn-sair" class="btn-link">Sair</button>
+          </div>
+          <div class="dropdown-corpo">
+            <div class="avatar-grande" id="avatar-grande">?</div>
+            <div class="info-usuario">
+              <strong id="nome-usuario">Carregando...</strong>
+              <span id="email-usuario">carregando@hortsoy.com.br</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </header>
 
   <main class="container">
@@ -37,25 +59,17 @@
       <p>Selecione o seu setor para acessar os treinamentos disponíveis.</p>
     </div>
 
-
     <div class="grid-setores" id="grid-setores">
 
       <a href="cursos.html?setor=rh" class="card-setor">
-        <div class="card-icone">👥</div>
-        <h2>Recursos Humanos</h2>
-        <p>Integração, Benefícios e Cultura</p>
-      </a>
-
-      <a href="cursos.html?setor=logistica" class="card-setor">
-        <div class="card-icone">📦</div>
-        <h2>Logística e Estoque</h2>
-        <p>Controle, Expedição e Segurança</p>
+        <div class="card-icone">💰👥📦⚙️📊🤝💻🏗️</div>
+        <h2>Nossos Treinamentos</h2>
       </a>
 
     </div>
   </main>
 
-  <script src="app.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 
 </html>

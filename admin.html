@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Admin | HortSoy</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .admin-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: var(--fundo-card);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--borda-card);
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-grupo {
+      margin-bottom: 15px;
+    }
+
+    .form-grupo label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: var(--cor-verde-hortsoy);
+    }
+
+    .form-grupo input,
+    .form-grupo select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--borda-card);
+      border-radius: 6px;
+      background: var(--fundo-pagina);
+      color: var(--texto-principal);
+    }
+
+    .btn-salvar {
+      background: var(--cor-verde-hortsoy);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+      font-size: 1.1rem;
+      margin-top: 10px;
+    }
+
+    .btn-migrar {
+      background: #E53935;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .card-aviso {
+      background: #fff3cd;
+      color: #856404;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      border-left: 4px solid #ffeeba;
+    }
+  </style>
+</head>
+
+<body class="modo-claro">
+  <header class="cabecalho-cursos">
+    <div class="logo-container">
+      <img src="assets/logos/jee-preto.png" alt="Logo HortSoy" id="logo-hortsoy">
+      <div class="separador-logo"></div>
+      <div class="titulos-plataforma">
+        <span class="texto-treinamentos">Painel Admin</span>
+        <span class="texto-subtitulo">Acesso Restrito</span>
+      </div>
+    </div>
+    <a href="index.html" class="btn-voltar" style="margin:0;">← Voltar ao Início</a>
+  </header>
+
+  <main class="admin-container">
+    <div class="admin-header">
+      <h2>Adicionar Novo Curso</h2>
+      <button id="btn-migrar" class="btn-migrar">⚠️ Importar Dados Antigos (Aperte 1 vez)</button>
+    </div>
+
+    <form id="form-novo-curso">
+      <div class="form-grupo">
+        <label for="select-setor">Escolha o Setor</label>
+        <select id="select-setor" required>
+          <option value="">Carregando setores...</option>
+        </select>
+      </div>
+
+      <div class="form-grupo">
+        <label for="titulo-curso">Título do Módulo/Curso</label>
+        <input type="text" id="titulo-curso" placeholder="Ex: Módulo 1 - Introdução" required>
+      </div>
+
+      <h3 style="margin-top: 25px; margin-bottom: 10px; color: var(--texto-secundario);">Detalhes do Vídeo
+      </h3>
+      <div class="form-grupo">
+        <label for="titulo-video">Nome da Aula</label>
+        <input type="text" id="titulo-video" placeholder="Ex: Aula 1: Apresentação">
+      </div>
+      <div class="form-grupo">
+        <label for="url-video">Link do Vídeo (YouTube Embed)</label>
+        <input type="url" id="url-video" placeholder="https://www.youtube.com/embed/XXXXXX">
+      </div>
+
+      <h3 style="margin-top: 25px; margin-bottom: 10px; color: var(--texto-secundario);">Detalhes do PDF</h3>
+      <div class="form-grupo">
+        <label for="titulo-pdf">Nome do Arquivo</label>
+        <input type="text" id="titulo-pdf" placeholder="Ex: Manual PDF">
+      </div>
+      <div class="form-grupo">
+        <label for="url-pdf">Link do Arquivo</label>
+          <input type="url" id="url-pdf" placeholder="Ex: https://grupohortsoy.sharepoint.com/treinamentos/manual.pdf">
+      </div>
+
+      <button type="submit" class="btn-salvar" id="btn-submit-curso">Salvar Curso</button>
+    </form>
+  </main>
+
+  <script type="module" src="admin.js"></script>
+</body>
+
+</html>

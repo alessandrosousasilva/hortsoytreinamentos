@@ -304,6 +304,36 @@ body.modo-escuro .cabecalho.efeito-rolagem {
   color: var(--cor-verde-hortsoy);
 }
 
+/* Etiqueta de Contato do Setor */
+.contato-setor {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 15px;
+  padding: 6px 15px;
+  background-color: rgba(0, 154, 80, 0.1); /* Fundo verde clarinho */
+  border: 1px solid rgba(0, 154, 80, 0.3);
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.contato-setor a {
+  color: var(--cor-verde-hortsoy);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.contato-setor a:hover {
+  color: var(--texto-principal);
+  text-decoration: underline;
+}
+
+/* Ajuste no Dark Mode */
+body.modo-escuro .contato-setor {
+  background-color: rgba(0, 154, 80, 0.2);
+}
+
 /* --- Blocos de Cursos (Expansíveis / Acordeão) --- */
 .curso-bloco {
   background-color: var(--fundo-card);
@@ -499,12 +529,12 @@ body.modo-escuro .cabecalho.efeito-rolagem {
   /* 1. O Cabeçalho Principal */
   .cabecalho {
     flex-wrap: wrap;
-    padding: 8px 15px; /* Reduzido o espaço lateral */
+    padding: 15px 15px; /* Reduzido o espaço lateral */
     position: relative; /* Essencial para o botão de tema flutuar */
     justify-content: center; /* Centraliza a logo */
   }
   .cabecalho-cursos {
-    padding: 8px 15px; /* Padding mobile reduzido */
+    padding: 15px 15px; /* Padding mobile reduzido */
   }
 
   .logo-container {
@@ -588,7 +618,7 @@ body.modo-escuro .cabecalho.efeito-rolagem {
 /* --- Cabeçalho Simplificado (Apenas para cursos.html) --- */
 .cabecalho-cursos {
   display: flex;
-  justify-content: left; /* Centraliza a logo e os textos */
+  justify-content: space-between; /* Centraliza a logo e os textos */
   align-items: center;
   padding: 15px 15%; /* Padding reduzido para diminuir o tamanho */
   background-color: var(--fundo-card);
@@ -603,4 +633,208 @@ body.modo-escuro .cabecalho.efeito-rolagem {
   position: sticky;
   top: 0;
   z-index: 1000;
+}
+
+/* --- Ações do Cabeçalho (Tema e Perfil) --- */
+.acoes-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* --- Menu de Usuário (Dropdown) --- */
+.menu-usuario {
+  position: relative;
+}
+
+/* As "bolinhas" com a inicial do nome */
+.avatar-usuario,
+.avatar-grande {
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: white;
+  background-color: var(--cor-verde-hortsoy);
+}
+
+.avatar-usuario {
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.avatar-usuario:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* A Caixa Suspensa */
+.dropdown-usuario {
+  position: absolute;
+  top: 55px; /* Fica logo abaixo da bolinha */
+  right: 0;
+  width: 320px;
+  background-color: var(--fundo-card);
+  border: 1px solid var(--borda-card);
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  display: none; /* Escondido por padrão */
+  flex-direction: column;
+  z-index: 2000;
+}
+
+.dropdown-usuario.mostrar {
+  display: flex; /* Classe que o JS vai usar para exibir */
+}
+
+/* Topo do Dropdown (Empresa e Sair) */
+.dropdown-topo {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--borda-card);
+}
+
+.dropdown-empresa {
+  font-weight: bold;
+  color: var(--texto-secundario);
+  font-size: 0.9rem;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--texto-principal);
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+.btn-link:hover {
+  color: #e53935; /* Fica vermelho ao passar o mouse em 'Sair' */
+}
+
+/* Corpo do Dropdown (Nome e Email) */
+.dropdown-corpo {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  gap: 15px;
+}
+
+.avatar-grande {
+  width: 60px;
+  height: 60px;
+  font-size: 2rem;
+  flex-shrink: 0;
+  background-color: transparent;
+  border: 2px solid var(--cor-verde-hortsoy);
+  color: var(--texto-principal);
+}
+
+.info-usuario {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.info-usuario strong {
+  font-size: 1.1rem;
+  color: var(--texto-principal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Coloca '...' se o nome for gigante */
+}
+
+.info-usuario span {
+  font-size: 0.85rem;
+  color: var(--texto-secundario);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Modal e Botão de Novo Curso In-Place --- */
+.btn-novo-curso {
+  background-color: var(--cor-verde-hortsoy);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.btn-novo-curso:hover {
+  background-color: var(--cor-verde-escuro);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+  backdrop-filter: blur(5px); /* Efeito de vidro no fundo inteiro */
+}
+.modal-conteudo {
+  background-color: var(--fundo-card);
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--borda-card);
+  padding-bottom: 10px;
+}
+.modal-header h2 {
+  color: var(--cor-verde-hortsoy);
+  font-size: 1.5rem;
+}
+.btn-fechar {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--texto-secundario);
+  line-height: 1;
+}
+.btn-fechar:hover {
+  color: #e53935;
+}
+
+/* --- Botão de Excluir (Admin) --- */
+.btn-excluir {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.3s, transform 0.2s;
+    padding: 5px;
+}
+
+.btn-excluir:hover {
+    opacity: 1;
+    transform: scale(1.2); /* Dá uma leve aumentada quando passa o mouse */
 }

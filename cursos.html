@@ -13,7 +13,7 @@
 
   <header class="cabecalho-cursos">
     <div class="logo-container">
-      <img src="assets/logos/logo-hortsoy.png" alt="Logo HortSoy" id="logo-hortsoy">
+      <img src="assets/logos/jee-preto.png" alt="Logo jee" id="logo-hortsoy">
       <div class="separador-logo"></div>
       <div class="titulos-plataforma">
         <span class="texto-treinamentos">Treinamentos</span>
@@ -22,19 +22,42 @@
 
     </div>
 
-    <div class="barra-pesquisa-header" style="visibility: hidden;">
-      <input type="text" disabled>
+    <div class="acoes-header">
+      <button id="btn-tema" class="btn-tema">🌙</button>
+
+      <div class="menu-usuario">
+        <div class="avatar-usuario" id="avatar-mini" title="Meu Perfil">?</div>
+
+        <div class="dropdown-usuario" id="dropdown-perfil">
+          <div class="dropdown-topo">
+            <span class="dropdown-empresa">Grupo HortSoy</span>
+            <button id="btn-admin" class="btn-link"
+              style="display: none; color: #009a50; font-weight: bold; margin-right: 10px;">Painel Admin</button>
+            <button id="btn-sair" class="btn-link">Sair</button>
+          </div>
+          <div class="dropdown-corpo">
+            <div class="avatar-grande" id="avatar-grande">?</div>
+            <div class="info-usuario">
+              <strong id="nome-usuario">Carregando...</strong>
+              <span id="email-usuario">carregando@hortsoy.com.br</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <button id="btn-tema" class="btn-tema">🌙</button>
   </header>
 
   <main class="container">
-    <a href="index.html" class="btn-voltar">← Voltar para o Início</a>
+    <a href="index.html" class="btn-voltar">← Voltar</a>
 
     <div class="cabecalho-setor">
       <div class="info-setor">
         <h1 id="titulo-setor">Carregando...</h1>
         <p id="descricao-setor"></p>
+
+        <div class="contato-setor" id="caixa-email-setor" style="display: none;">
+          ✉️ <a href="#" id="link-email-setor">carregando@hortsoy.com.br</a>
+        </div>
       </div>
 
       <div class="pesquisa-setor">
@@ -42,11 +65,47 @@
       </div>
     </div>
 
+    <button id="btn-add-curso-setor" class="btn-novo-curso" style="display: none;">Adicionar Treinamento</button>
     <div class="lista-cursos" id="lista-cursos">
+    </div>
+
+    <div id="modal-novo-curso" class="modal-overlay" style="display: none;">
+      <div class="modal-conteudo">
+        <div class="modal-header">
+          <h2>Novo Curso</h2>
+          <button id="btn-fechar-modal" class="btn-fechar">&times;</button>
+        </div>
+        <form id="form-curso-local">
+          <div class="form-grupo">
+            <label>Título do Curso</label>
+            <input type="text" id="modal-titulo" required>
+          </div>
+          <div class="form-grupo">
+            <label>Nome do Vídeo</label>
+            <input type="text" id="modal-video-nome" placeholder="Ex: Aula 1">
+          </div>
+          <div class="form-grupo">
+            <label>Link do Vídeo</label>
+            <input type="url" id="modal-video-url" placeholder="https://www.youtube.com/embed/...">
+          </div>
+          <div class="form-grupo">
+            <label>Nome do PDF</label>
+            <input type="text" id="modal-pdf-nome" placeholder="Ex: Manual PDF">
+          </div>
+          <div class="form-grupo">
+            <label>Link do PDF</label>
+            <input type="url" id="modal-pdf-url"
+              placeholder="https://grupohortsoy.sharepoint.com/treinamentos/manual.pdf">
+          </div>
+          <button type="submit" class="btn-salvar" id="btn-salvar-modal"
+            style="width: 100%; margin-top: 15px; padding: 12px; background: var(--cor-verde-hortsoy); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Salvar
+            Treinamento</button>
+        </form>
+      </div>
     </div>
   </main>
 
-  <script src="app.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 
 </html>

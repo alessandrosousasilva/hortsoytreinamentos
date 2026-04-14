@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | HortSoy Treinamentos</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="shortcut icon" type="imagex/png" href="/assets/icones/icon-livro.ico">
+  <style>
+    .container-login {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: var(--fundo-pagina);
+    }
+
+    .caixa-login {
+      background-color: var(--fundo-card);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      border-top: 4px solid var(--cor-verde-hortsoy);
+    }
+
+    .caixa-login img {
+      height: 60px;
+      margin-bottom: 10px;
+    }
+
+    .caixa-login h2 {
+      color: var(--texto-principal);
+      margin-bottom: 5px;
+      font-size: 1.5rem;
+    }
+
+    .caixa-login p {
+      color: var(--texto-secundario);
+      font-size: 0.9rem;
+      margin-bottom: 25px;
+    }
+
+    .form-grupo {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .form-grupo label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: var(--texto-principal);
+      font-size: 0.9rem;
+    }
+
+    .form-grupo input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid var(--borda-card);
+      border-radius: 8px;
+      font-size: 1rem;
+      background-color: var(--fundo-pagina);
+      color: var(--texto-principal);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .form-grupo input:focus {
+      border-color: var(--cor-verde-hortsoy);
+    }
+
+    .btn-entrar {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--cor-verde-hortsoy);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+    }
+
+    .btn-entrar:hover {
+      background-color: var(--cor-verde-escuro);
+    }
+
+    .erro-msg {
+      color: #E53935;
+      font-size: 0.85rem;
+      margin-top: 15px;
+      display: none;
+      font-weight: bold;
+    }
+  </style>
+
+</head>
+
+<body class="modo-claro">
+
+  <div class="container-login">
+    <div class="caixa-login">
+      <img src="assets/logos/jee-preto.png" alt="Logo JEE" id="logo-login">
+      <h2>Portal de Treinamentos</h2>
+      <p>Acesso exclusivo para colaboradores.</p>
+
+      <form id="form-login">
+        <div class="form-grupo">
+          <label for="email">E-mail Corporativo</label>
+          <input type="email" id="email" placeholder="nome.sobrenome@hortsoy.com.br" required>
+        </div>
+        <div class="form-grupo">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-entrar" id="btn-submit">Acessar Plataforma</button>
+        <div id="mensagem-erro" class="erro-msg">E-mail ou Senha incorretos.</div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="auth.js"></script>
+</body>
+
+</html>

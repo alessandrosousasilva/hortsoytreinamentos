@@ -586,42 +586,66 @@ window.registrarProgresso = async function(idUnico) {
 };
 
 // 3. O Vídeo Inteligente que mede os 75%
-window.carregarVideoTrackeado = function(elementoHtml) {
-    const urlOriginal = elementoHtml.getAttribute("data-url");
-    const idUnico = elementoHtml.getAttribute("data-id");
-    const videoId = obterIdYoutube(urlOriginal);
+window.carregarVideoTrackeado = function (elementoHtml) {
+  const urlOriginal = elementoHtml.getAttribute("data-url");
+  const idUnico = elementoHtml.getAttribute("data-id");
+  const videoId = obterIdYoutube(urlOriginal);
 
+  elementoHtml.onclick = null;
+  elementoHtml.style.cursor = "default";
+
+  let jaContabilizou = false;
+
+  // --- CASO 1: É VÍDEO DO YOUTUBE ---
+  if (videoId) {
     const divId = `yt-${idUnico}`;
     elementoHtml.innerHTML = `<div id="${divId}"></div>`;
-    elementoHtml.onclick = null;
-    elementoHtml.style.cursor = "default";
 
-    let jaContabilizou = false;
-
-    // Quando o usuário clica no play vermelho, o "Olheiro" do YT entra em ação
     new YT.Player(divId, {
-        videoId: videoId,
-        playerVars: { 'autoplay': 1, 'rel': 0 },
-        events: {
-            'onStateChange': function(event) {
-                // Se o vídeo estiver TOCANDO (State = 1)
-                if (event.data == 1 && !jaContabilizou) {
-                    const player = event.target;
-                    
-                    // Cria um cronômetro invisível que checa a cada 5 segundos
-                    const checador = setInterval(() => {
-                        const tempoAtual = player.getCurrentTime();
-                        const duracao = player.getDuration();
-                        
-                        // Se bateu 75% da duração do vídeo (0.75)
-                        if (duracao > 0 && (tempoAtual / duracao) >= 0.75) {
-                            window.registrarProgresso(idUnico);
-                            jaContabilizou = true;
-                            clearInterval(checador); // Desliga o cronômetro para poupar memória
-                        }
-                    }, 5000); 
-                }
-            }
-        }
+      videoId: videoId,
+      playerVars: { autoplay: 1, rel: 0 },
+      events: {
+        onStateChange: function (event) {
+          if (event.data == 1 && !jaContabilizou) {
+            const player = event.target;
+            const checador = setInterval(() => {
+              const tempoAtual = player.getCurrentTime();
+              const duracao = player.getDuration();
+              if (duracao > 0 && tempoAtual / duracao >= 0.75) {
+                window.registrarProgresso(idUnico);
+                jaContabilizou = true;
+                clearInterval(checador);
+              }
+            }, 5000);
+          }
+        },
+      },
     });
+  }
+  // --- CASO 2: É LINK DO ONEDRIVE OU DIRETO (MP4) ---
+  else {
+    // Criamos um elemento de vídeo nativo do HTML5
+    const videoElement = document.createElement("video");
+    videoElement.src = urlOriginal;
+    videoElement.controls = true;
+    videoElement.autoplay = true;
+    videoElement.style.width = "100%";
+    videoElement.style.height = "100%";
+
+    elementoHtml.innerHTML = "";
+    elementoHtml.appendChild(videoElement);
+
+    // Monitora o progresso do vídeo nativo
+    videoElement.ontimeupdate = function () {
+      if (!jaContabilizou) {
+        const progresso = videoElement.currentTime / videoElement.duration;
+        if (progresso >= 0.75) {
+          window.registrarProgresso(idUnico);
+          jaContabilizou = true;
+          // Removemos o evento após contabilizar para poupar processamento
+          videoElement.ontimeupdate = null;
+        }
+      }
+    };
+  }
 };

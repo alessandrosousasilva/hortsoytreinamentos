@@ -253,9 +253,6 @@ if (listaCursos) {
             if (curso.videos && curso.videos.length > 0) {
               curso.videos.forEach((video, vIndex) => {
                 const videoId = obterIdYoutube(video.url);
-                const urlCapa = videoId
-                  ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
-                  : "";
 
                 // Cria um "CPF" único para este vídeo no banco de dados
                 const idUnico = `${setorId}_${index}_video_${vIndex}`;
@@ -266,11 +263,20 @@ if (listaCursos) {
                   ? "✅"
                   : "🎥";
 
+                // --- NOVA LÓGICA DA CAPA (YOUTUBE VS ONEDRIVE) ---
+                let tagCapaHTML = "";
+                if (videoId) {
+                  // Se achou o ID do YouTube, cria a imagem com a capa oficial
+                  const urlCapa = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+                  tagCapaHTML = `<img src="${urlCapa}" alt="Capa do vídeo">`;
+                }
+                // Se não for YouTube (ex: OneDrive), a tagCapaHTML continua vazia e o fundo fica preto!
+
                 listaVideosHTML += `
                     <div class="item-video">
                         <h4>${iconeStatus} ${video.titulo}</h4>
                         <div class="video-container lazy-video" data-url="${video.url}" data-id="${idUnico}" onclick="carregarVideoTrackeado(this)" title="Clique para reproduzir">
-                            <img src="${urlCapa}" alt="Capa do vídeo">
+                            ${tagCapaHTML}
                             <div class="btn-play">▶</div>
                         </div>
                     </div>
@@ -365,7 +371,7 @@ if (listaCursos) {
       if (e.target === modalNovoCurso) modalNovoCurso.style.display = "none";
     });
 
-    // SALVAR NO BANCO DE DADOS
+    // --- LÓGICA DO MODAL (ADICIONAR OU EDITAR) ---
     formCursoLocal.addEventListener("submit", async (e) => {
       e.preventDefault();
       const btnSalvar = document.getElementById("btn-salvar-modal");
@@ -373,18 +379,34 @@ if (listaCursos) {
         document.getElementById("modal-edit-index").value,
       );
       btnSalvar.textContent = "Salvando...";
+      btnSalvar.disabled = true;
 
       const parametrosDaURL = new URLSearchParams(window.location.search);
       const setorId = parametrosDaURL.get("setor");
 
+      // Pega o link que o usuário colou
+      let videoUrlBruta = document.getElementById("modal-video-url").value;
+      let videoUrlFinal = videoUrlBruta;
+
+      // --- AUTO-CONVERSOR DO YOUTUBE ---
+      // Se tiver um link e for do YouTube, transforma automaticamente em /embed/
+      if (videoUrlBruta) {
+        const regexYT =
+          /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+        const match = videoUrlBruta.match(regexYT);
+        if (match && match[1]) {
+          videoUrlFinal = `https://www.youtube.com/embed/${match[1]}`;
+        }
+      }
+
       const novoCurso = {
         titulo: document.getElementById("modal-titulo").value,
-        videos: document.getElementById("modal-video-url").value
+        videos: videoUrlFinal
           ? [
               {
                 titulo:
                   document.getElementById("modal-video-nome").value || "Aula",
-                url: document.getElementById("modal-video-url").value,
+                url: videoUrlFinal,
               },
             ]
           : [],
@@ -408,163 +430,170 @@ if (listaCursos) {
           // MODO ADICIONAR NOVO
           listaCursos.push(novoCurso);
         } else {
-          // MODO EDITAR: Substitui o item no index específico
+          // MODO EDITAR
           listaCursos[editIndex] = novoCurso;
         }
 
         await updateDoc(setorRef, { cursos: listaCursos });
 
-        alert(editIndex === -1 ? "Adicionado!" : "Atualizado com sucesso!");
+        alert(
+          editIndex === -1
+            ? "Treinamento adicionado com sucesso!"
+            : "Treinamento atualizado com sucesso!",
+        );
         document.getElementById("modal-novo-curso").style.display = "none";
         window.carregarDetalhesSetor();
       } catch (error) {
-        console.error(error);
-        alert("Erro ao salvar.");
+        console.error("Erro ao salvar:", error);
+        alert("Erro ao salvar o curso. Verifique sua conexão e permissões.");
       } finally {
         btnSalvar.textContent = "Salvar Treinamento";
+        btnSalvar.disabled = false;
       }
     });
-  }
 
-  const inputPesquisaCurso = document.getElementById("input-pesquisa-curso");
-  if (inputPesquisaCurso) {
-    inputPesquisaCurso.addEventListener("input", (evento) => {
-      const termoPesquisado = evento.target.value.toLowerCase();
-      const blocosDeCursos = document.querySelectorAll(".curso-bloco");
+    const inputPesquisaCurso = document.getElementById("input-pesquisa-curso");
+    if (inputPesquisaCurso) {
+      inputPesquisaCurso.addEventListener("input", (evento) => {
+        const termoPesquisado = evento.target.value.toLowerCase();
+        const blocosDeCursos = document.querySelectorAll(".curso-bloco");
 
-      blocosDeCursos.forEach((bloco) => {
-        const textoDoBloco = bloco.innerText.toLowerCase();
-        bloco.style.display = textoDoBloco.includes(termoPesquisado)
-          ? "block"
-          : "none";
+        blocosDeCursos.forEach((bloco) => {
+          const textoDoBloco = bloco.innerText.toLowerCase();
+          bloco.style.display = textoDoBloco.includes(termoPesquisado)
+            ? "block"
+            : "none";
+        });
       });
-    });
+    }
   }
-}
 
-// --- FUNÇÕES GLOBAIS ---
-window.alternarCurso = function (idCurso) {
-  const blocoClicado = document.getElementById(idCurso);
-  const jaEstavaAberto = blocoClicado.classList.contains("aberto");
-  const todosBlocos = document.querySelectorAll(".curso-bloco");
+  // --- FUNÇÕES GLOBAIS ---
+  window.alternarCurso = function (idCurso) {
+    const blocoClicado = document.getElementById(idCurso);
+    const jaEstavaAberto = blocoClicado.classList.contains("aberto");
+    const todosBlocos = document.querySelectorAll(".curso-bloco");
 
-  if (jaEstavaAberto) {
-    blocoClicado.classList.remove("aberto");
-    todosBlocos.forEach((bloco) => {
-      bloco.style.display = "block";
-    });
-  } else {
-    todosBlocos.forEach((bloco) => {
-      bloco.classList.remove("aberto");
-      if (bloco.id === idCurso) {
-        bloco.classList.add("aberto");
+    if (jaEstavaAberto) {
+      blocoClicado.classList.remove("aberto");
+      todosBlocos.forEach((bloco) => {
         bloco.style.display = "block";
-      } else {
-        bloco.style.display = "none";
-      }
-    });
+      });
+    } else {
+      todosBlocos.forEach((bloco) => {
+        bloco.classList.remove("aberto");
+        if (bloco.id === idCurso) {
+          bloco.classList.add("aberto");
+          bloco.style.display = "block";
+        } else {
+          bloco.style.display = "none";
+        }
+      });
+    }
+  };
+
+  function obterIdYoutube(url) {
+    const regex =
+      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+    const match = url.match(regex);
+    return match ? match[1] : null;
   }
-};
 
-function obterIdYoutube(url) {
-  const regex =
-    /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
-  const match = url.match(regex);
-  return match ? match[1] : null;
-}
+  window.carregarVideo = function (elementoHtml) {
+    const urlOriginal = elementoHtml.getAttribute("data-url");
+    elementoHtml.innerHTML = `<iframe src="${urlOriginal}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    elementoHtml.onclick = null;
+    elementoHtml.style.cursor = "default";
+  };
 
-window.carregarVideo = function (elementoHtml) {
-  const urlOriginal = elementoHtml.getAttribute("data-url");
-  elementoHtml.innerHTML = `<iframe src="${urlOriginal}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-  elementoHtml.onclick = null;
-  elementoHtml.style.cursor = "default";
-};
+  // --- FUNÇÃO PARA EXCLUIR UM CURSO ---
+  window.deletarCurso = async function (evento, setorId, indexDoCurso) {
+    // Impede que o clique na lixeira abra o sanfona do curso
+    evento.stopPropagation();
 
-// --- FUNÇÃO PARA EXCLUIR UM CURSO ---
-window.deletarCurso = async function (evento, setorId, indexDoCurso) {
-  // Impede que o clique na lixeira abra o sanfona do curso
-  evento.stopPropagation();
+    const confirmacao = confirm(
+      "Tem certeza que deseja excluir este treinamento? Esta ação apagará o módulo permanentemente.",
+    );
+    if (!confirmacao) return;
 
-  const confirmacao = confirm(
-    "Tem certeza que deseja excluir este treinamento? Esta ação apagará o módulo permanentemente.",
-  );
-  if (!confirmacao) return;
+    try {
+      const docRef = doc(db, "setores", setorId);
+      const docSnap = await getDoc(docRef);
 
-  try {
+      if (docSnap.exists()) {
+        const setor = docSnap.data();
+        let listaCursos = setor.cursos || [];
+
+        // Remove 1 item da lista exatamente na posição (index) que o usuário clicou
+        listaCursos.splice(indexDoCurso, 1);
+
+        // Salva a nova lista (sem o curso apagado) de volta no Firebase
+        await updateDoc(docRef, { cursos: listaCursos });
+
+        alert("Treinamento excluído com sucesso!");
+
+        // Recarrega a tela imediatamente para o curso sumir
+        carregarDetalhesSetor();
+      }
+    } catch (error) {
+      console.error("Erro ao excluir:", error);
+      alert("Erro ao excluir. Verifique sua conexão e tente novamente.");
+    }
+  };
+  // --- FUNÇÃO PARA PREPARAR A EDIÇÃO ---
+  window.prepararEdicao = async function (evento, setorId, index) {
+    evento.stopPropagation(); // Não abre o acordeão
+
     const docRef = doc(db, "setores", setorId);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      const setor = docSnap.data();
-      let listaCursos = setor.cursos || [];
+      const curso = docSnap.data().cursos[index];
 
-      // Remove 1 item da lista exatamente na posição (index) que o usuário clicou
-      listaCursos.splice(indexDoCurso, 1);
+      // Preenche o modal com os dados atuais
+      document.getElementById("modal-titulo").value = curso.titulo;
+      document.getElementById("modal-video-nome").value =
+        curso.videos[0]?.titulo || "";
+      document.getElementById("modal-video-url").value =
+        curso.videos[0]?.url || "";
+      document.getElementById("modal-pdf-nome").value =
+        curso.pdfs[0]?.titulo || "";
+      document.getElementById("modal-pdf-url").value = curso.pdfs[0]?.url || "";
 
-      // Salva a nova lista (sem o curso apagado) de volta no Firebase
-      await updateDoc(docRef, { cursos: listaCursos });
+      // Guarda o index para sabermos que estamos EDITANDO
+      document.getElementById("modal-edit-index").value = index;
 
-      alert("Treinamento excluído com sucesso!");
-
-      // Recarrega a tela imediatamente para o curso sumir
-      carregarDetalhesSetor();
+      // Muda o visual do modal para edição
+      document.querySelector(".modal-header h2").textContent =
+        "Editar Treinamento";
+      document.getElementById("modal-novo-curso").style.display = "flex";
     }
-  } catch (error) {
-    console.error("Erro ao excluir:", error);
-    alert("Erro ao excluir. Verifique sua conexão e tente novamente.");
-  }
-};
-// --- FUNÇÃO PARA PREPARAR A EDIÇÃO ---
-window.prepararEdicao = async function (evento, setorId, index) {
-  evento.stopPropagation(); // Não abre o acordeão
+  };
 
-  const docRef = doc(db, "setores", setorId);
-  const docSnap = await getDoc(docRef);
+  // --- RESETAR MODAL AO ADICIONAR NOVO ---
+  // Ajuste o clique do seu botão verde "+ Adicionar Treinamento" para limpar o index
+  document
+    .getElementById("btn-add-curso-setor")
+    .addEventListener("click", () => {
+      document.getElementById("form-curso-local").reset();
+      document.getElementById("modal-edit-index").value = "-1"; // -1 significa NOVO
+      document.querySelector(".modal-header h2").textContent =
+        "Novo Treinamento";
+      document.getElementById("modal-novo-curso").style.display = "flex";
+    });
 
-  if (docSnap.exists()) {
-    const curso = docSnap.data().cursos[index];
+  // ==========================================
+  // --- LÓGICA DE PROGRESSO DO USUÁRIO ---
+  // ==========================================
 
-    // Preenche o modal com os dados atuais
-    document.getElementById("modal-titulo").value = curso.titulo;
-    document.getElementById("modal-video-nome").value =
-      curso.videos[0]?.titulo || "";
-    document.getElementById("modal-video-url").value =
-      curso.videos[0]?.url || "";
-    document.getElementById("modal-pdf-nome").value =
-      curso.pdfs[0]?.titulo || "";
-    document.getElementById("modal-pdf-url").value = curso.pdfs[0]?.url || "";
+  // 1. Injeta a API oficial do Youtube "escondida" na página
+  const tagYoutube = document.createElement("script");
+  tagYoutube.src = "https://www.youtube.com/iframe_api";
+  const primeiraTag = document.getElementsByTagName("script")[0];
+  primeiraTag.parentNode.insertBefore(tagYoutube, primeiraTag);
 
-    // Guarda o index para sabermos que estamos EDITANDO
-    document.getElementById("modal-edit-index").value = index;
-
-    // Muda o visual do modal para edição
-    document.querySelector(".modal-header h2").textContent =
-      "Editar Treinamento";
-    document.getElementById("modal-novo-curso").style.display = "flex";
-  }
-};
-
-// --- RESETAR MODAL AO ADICIONAR NOVO ---
-// Ajuste o clique do seu botão verde "+ Adicionar Treinamento" para limpar o index
-document.getElementById("btn-add-curso-setor").addEventListener("click", () => {
-  document.getElementById("form-curso-local").reset();
-  document.getElementById("modal-edit-index").value = "-1"; // -1 significa NOVO
-  document.querySelector(".modal-header h2").textContent = "Novo Treinamento";
-  document.getElementById("modal-novo-curso").style.display = "flex";
-});
-
-// ==========================================
-// --- LÓGICA DE PROGRESSO DO USUÁRIO ---
-// ==========================================
-
-// 1. Injeta a API oficial do Youtube "escondida" na página
-const tagYoutube = document.createElement('script');
-tagYoutube.src = "https://www.youtube.com/iframe_api";
-const primeiraTag = document.getElementsByTagName('script')[0];
-primeiraTag.parentNode.insertBefore(tagYoutube, primeiraTag);
-
-// 2. Salva o progresso no Banco de Dados
-window.registrarProgresso = async function(idUnico) {
+  // 2. Salva o progresso no Banco de Dados
+  window.registrarProgresso = async function (idUnico) {
     if (!window.progressoUsuario) window.progressoUsuario = {};
     if (window.progressoUsuario[idUnico]) return; // Impede de salvar 2 vezes
 
@@ -572,80 +601,95 @@ window.registrarProgresso = async function(idUnico) {
     const email = auth.currentUser.email;
 
     try {
-        // Envia para o Firebase (Cria um documento com o email do usuario)
-        await setDoc(doc(db, "progresso", email), {
-            [idUnico]: true
-        }, { merge: true }); // O 'merge' apenas adiciona os novos, sem apagar os velhos
-        
-        console.log("Progresso salvo com sucesso!");
-        // Obs: A barra verde só vai encher visualmente quando ele recarregar a página 
-        // ou entrar no setor de novo. Isso evita que o vídeo seja interrompido do nada!
-    } catch (error) {
-        console.error("Erro ao salvar progresso:", error);
-    }
-};
-
-// 3. O Vídeo Inteligente que mede os 75%
-window.carregarVideoTrackeado = function (elementoHtml) {
-  const urlOriginal = elementoHtml.getAttribute("data-url");
-  const idUnico = elementoHtml.getAttribute("data-id");
-  const videoId = obterIdYoutube(urlOriginal);
-
-  elementoHtml.onclick = null;
-  elementoHtml.style.cursor = "default";
-
-  let jaContabilizou = false;
-
-  // --- CASO 1: É VÍDEO DO YOUTUBE ---
-  if (videoId) {
-    const divId = `yt-${idUnico}`;
-    elementoHtml.innerHTML = `<div id="${divId}"></div>`;
-
-    new YT.Player(divId, {
-      videoId: videoId,
-      playerVars: { autoplay: 1, rel: 0 },
-      events: {
-        onStateChange: function (event) {
-          if (event.data == 1 && !jaContabilizou) {
-            const player = event.target;
-            const checador = setInterval(() => {
-              const tempoAtual = player.getCurrentTime();
-              const duracao = player.getDuration();
-              if (duracao > 0 && tempoAtual / duracao >= 0.75) {
-                window.registrarProgresso(idUnico);
-                jaContabilizou = true;
-                clearInterval(checador);
-              }
-            }, 5000);
-          }
+      // Envia para o Firebase (Cria um documento com o email do usuario)
+      await setDoc(
+        doc(db, "progresso", email),
+        {
+          [idUnico]: true,
         },
-      },
-    });
-  }
-  // --- CASO 2: É LINK DO ONEDRIVE OU DIRETO (MP4) ---
-  else {
-    // Criamos um elemento de vídeo nativo do HTML5
-    const videoElement = document.createElement("video");
-    videoElement.src = urlOriginal;
-    videoElement.controls = true;
-    videoElement.autoplay = true;
-    videoElement.style.width = "100%";
-    videoElement.style.height = "100%";
+        { merge: true },
+      ); // O 'merge' apenas adiciona os novos, sem apagar os velhos
 
-    elementoHtml.innerHTML = "";
-    elementoHtml.appendChild(videoElement);
+      console.log("Progresso salvo com sucesso!");
+      // Obs: A barra verde só vai encher visualmente quando ele recarregar a página
+      // ou entrar no setor de novo. Isso evita que o vídeo seja interrompido do nada!
+    } catch (error) {
+      console.error("Erro ao salvar progresso:", error);
+    }
+  };
 
-    // Monitora o progresso do vídeo nativo
-    videoElement.ontimeupdate = function () {
-      if (!jaContabilizou) {
-        const progresso = videoElement.currentTime / videoElement.duration;
-        if (progresso >= 0.75) {
-          window.registrarProgresso(idUnico);
-          jaContabilizou = true;
-          // Removemos o evento após contabilizar para poupar processamento
-          videoElement.ontimeupdate = null;
+  // 3. O Vídeo Inteligente que mede os 75% ou reconhece o SharePoint
+  window.carregarVideoTrackeado = function (elementoHtml) {
+    const urlOriginal = elementoHtml.getAttribute("data-url");
+    const idUnico = elementoHtml.getAttribute("data-id");
+    const videoId = obterIdYoutube(urlOriginal);
+
+    elementoHtml.onclick = null;
+    elementoHtml.style.cursor = "default";
+
+    let jaContabilizou = false;
+
+    // --- CASO 1: É VÍDEO DO YOUTUBE (Rastreia 75%) ---
+    if (videoId) {
+      const divId = `yt-${idUnico}`;
+      elementoHtml.innerHTML = `<div id="${divId}"></div>`;
+
+      new YT.Player(divId, {
+        videoId: videoId,
+        playerVars: { autoplay: 1, rel: 0 },
+        events: {
+          onStateChange: function (event) {
+            if (event.data == 1 && !jaContabilizou) {
+              const player = event.target;
+              const checador = setInterval(() => {
+                const tempoAtual = player.getCurrentTime();
+                const duracao = player.getDuration();
+
+                if (duracao > 0 && tempoAtual / duracao >= 0.75) {
+                  window.registrarProgresso(idUnico);
+                  jaContabilizou = true;
+                  clearInterval(checador);
+                }
+              }, 5000);
+            }
+          },
+        },
+      });
+    }
+    // --- CASO 2: É LINK DO SHAREPOINT / ONEDRIVE (Iframe) ---
+    else if (
+      urlOriginal.includes("sharepoint.com") ||
+      urlOriginal.includes("embed.aspx") ||
+      urlOriginal.includes("onedrive")
+    ) {
+      // Como o bloqueio da Microsoft não deixa ler o tempo, registramos o progresso ao clicar
+      window.registrarProgresso(idUnico);
+
+      // Injeta o Iframe da Microsoft adaptado para o tamanho da nossa caixa
+      elementoHtml.innerHTML = `<iframe src="${urlOriginal}" width="100%" height="100%" frameborder="0" scrolling="no" allowfullscreen></iframe>`;
+    }
+    // --- CASO 3: É LINK DIRETO DE ARQUIVO (.mp4) ---
+    else {
+      const videoElement = document.createElement("video");
+      videoElement.src = urlOriginal;
+      videoElement.controls = true;
+      videoElement.autoplay = true;
+      videoElement.style.width = "100%";
+      videoElement.style.height = "100%";
+
+      elementoHtml.innerHTML = "";
+      elementoHtml.appendChild(videoElement);
+
+      videoElement.ontimeupdate = function () {
+        if (!jaContabilizou) {
+          const progresso = videoElement.currentTime / videoElement.duration;
+          if (progresso >= 0.75) {
+            window.registrarProgresso(idUnico);
+            jaContabilizou = true;
+            videoElement.ontimeupdate = null;
+          }
         }
-      }
-    };
-  }
-};
+      };
+    }
+  };
+}

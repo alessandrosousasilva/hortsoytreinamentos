@@ -210,7 +210,7 @@ if (listaCursos) {
           setorEncontrado.nome;
         document.getElementById("descricao-setor").textContent =
           setorEncontrado.descricao;
-        // --- NOVA LÓGICA DO E-MAIL ---
+        // --- LÓGICA DO E-MAIL ---
         const caixaEmail = document.getElementById("caixa-email-setor");
         const linkEmail = document.getElementById("link-email-setor");
 
@@ -258,20 +258,26 @@ if (listaCursos) {
               });
             }
 
-            // Só cria o HTML do botão de excluir SE o usuário for o Administrador
-            const btnExcluirHTML = window.isAdmin
-              ? `<button class="btn-excluir" onclick="deletarCurso(event, '${setorId}', ${index})" title="Excluir Treinamento">🗑️</button>`
-              : "";
+            // botões de Editar e Excluir apenas para o Administrador
+            let botoesAdminHTML = "";
+            if (window.isAdmin) {
+              botoesAdminHTML = `
+        <div style="display: flex; gap: 8px;">
+            <button class="btn-editar" onclick="prepararEdicao(event, '${setorId}', ${index})" title="Editar Treinamento">✏️</button>
+            <button class="btn-excluir" onclick="deletarCurso(event, '${setorId}', ${index})" title="Excluir Treinamento">🗑️</button>
+        </div>
+    `;
+            }
 
             const cursoHTML = `
-                <div class="curso-bloco" id="curso-${index}">
-                    <div class="curso-cabecalho" onclick="alternarCurso('curso-${index}')" tabindex="0">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <h3>📚 ${curso.titulo}</h3>
-                            ${btnExcluirHTML}
-                        </div>
-                        <span class="icone-expansao">▼</span>
-                    </div>
+    <div class="curso-bloco" id="curso-${index}">
+        <div class="curso-cabecalho" onclick="alternarCurso('curso-${index}')" tabindex="0">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <h3>📚 ${curso.titulo}</h3>
+                ${botoesAdminHTML}
+            </div>
+            <span class="icone-expansao">▼</span>
+        </div>
                     <div class="curso-conteudo">
                         <div class="area-videos">${listaVideosHTML}</div>
                         <div class="acoes-curso">${listaPdfsHTML}</div>
@@ -317,43 +323,57 @@ if (listaCursos) {
     formCursoLocal.addEventListener("submit", async (e) => {
       e.preventDefault();
       const btnSalvar = document.getElementById("btn-salvar-modal");
+      const editIndex = parseInt(
+        document.getElementById("modal-edit-index").value,
+      );
       btnSalvar.textContent = "Salvando...";
 
-      // Pega o ID do setor direto da URL onde o Admin está
       const parametrosDaURL = new URLSearchParams(window.location.search);
       const setorId = parametrosDaURL.get("setor");
 
-      const titulo = document.getElementById("modal-titulo").value;
-      const videoNome = document.getElementById("modal-video-nome").value;
-      const videoUrl = document.getElementById("modal-video-url").value;
-      const pdfNome = document.getElementById("modal-pdf-nome").value;
-      const pdfUrl = document.getElementById("modal-pdf-url").value;
-
-      // Monta o objeto com cuidado para não gerar listas vazias que quebram o código
       const novoCurso = {
-        titulo: titulo,
-        videos: videoUrl
-          ? [{ titulo: videoNome || "Vídeo da Aula", url: videoUrl }]
+        titulo: document.getElementById("modal-titulo").value,
+        videos: document.getElementById("modal-video-url").value
+          ? [
+              {
+                titulo:
+                  document.getElementById("modal-video-nome").value || "Aula",
+                url: document.getElementById("modal-video-url").value,
+              },
+            ]
           : [],
-        pdfs: pdfUrl
-          ? [{ titulo: pdfNome || "Material em PDF", url: pdfUrl }]
+        pdfs: document.getElementById("modal-pdf-url").value
+          ? [
+              {
+                titulo:
+                  document.getElementById("modal-pdf-nome").value || "PDF",
+                url: document.getElementById("modal-pdf-url").value,
+              },
+            ]
           : [],
       };
 
       try {
-        // Envia direto para o setor atual
         const setorRef = doc(db, "setores", setorId);
-        await updateDoc(setorRef, { cursos: arrayUnion(novoCurso) });
+        const docSnap = await getDoc(setorRef);
+        let listaCursos = docSnap.data().cursos || [];
 
-        alert("Treinamento adicionado com sucesso!");
-        modalNovoCurso.style.display = "none";
-        formCursoLocal.reset(); // Limpa o formulário
+        if (editIndex === -1) {
+          // MODO ADICIONAR NOVO
+          listaCursos.push(novoCurso);
+        } else {
+          // MODO EDITAR: Substitui o item no index específico
+          listaCursos[editIndex] = novoCurso;
+        }
 
-        // RECARREGA A LISTA NA MESMA HORA SEM PRECISAR DAR F5!
-        carregarDetalhesSetor();
+        await updateDoc(setorRef, { cursos: listaCursos });
+
+        alert(editIndex === -1 ? "Adicionado!" : "Atualizado com sucesso!");
+        document.getElementById("modal-novo-curso").style.display = "none";
+        window.carregarDetalhesSetor();
       } catch (error) {
-        console.error("Erro:", error);
-        alert("Erro ao salvar o curso. Verifique sua conexão ou permissões.");
+        console.error(error);
+        alert("Erro ao salvar.");
       } finally {
         btnSalvar.textContent = "Salvar Treinamento";
       }
@@ -415,34 +435,74 @@ window.carregarVideo = function (elementoHtml) {
 };
 
 // --- FUNÇÃO PARA EXCLUIR UM CURSO ---
-window.deletarCurso = async function(evento, setorId, indexDoCurso) {
-    // Impede que o clique na lixeira abra o sanfona do curso
-    evento.stopPropagation(); 
+window.deletarCurso = async function (evento, setorId, indexDoCurso) {
+  // Impede que o clique na lixeira abra o sanfona do curso
+  evento.stopPropagation();
 
-    const confirmacao = confirm("Tem certeza que deseja excluir este treinamento? Esta ação apagará o módulo permanentemente.");
-    if (!confirmacao) return;
+  const confirmacao = confirm(
+    "Tem certeza que deseja excluir este treinamento? Esta ação apagará o módulo permanentemente.",
+  );
+  if (!confirmacao) return;
 
-    try {
-        const docRef = doc(db, "setores", setorId);
-        const docSnap = await getDoc(docRef);
+  try {
+    const docRef = doc(db, "setores", setorId);
+    const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-            const setor = docSnap.data();
-            let listaCursos = setor.cursos || [];
+    if (docSnap.exists()) {
+      const setor = docSnap.data();
+      let listaCursos = setor.cursos || [];
 
-            // Remove 1 item da lista exatamente na posição (index) que o usuário clicou
-            listaCursos.splice(indexDoCurso, 1);
+      // Remove 1 item da lista exatamente na posição (index) que o usuário clicou
+      listaCursos.splice(indexDoCurso, 1);
 
-            // Salva a nova lista (sem o curso apagado) de volta no Firebase
-            await updateDoc(docRef, { cursos: listaCursos });
+      // Salva a nova lista (sem o curso apagado) de volta no Firebase
+      await updateDoc(docRef, { cursos: listaCursos });
 
-            alert("Treinamento excluído com sucesso!");
-            
-            // Recarrega a tela imediatamente para o curso sumir
-            carregarDetalhesSetor(); 
-        }
-    } catch(error) {
-        console.error("Erro ao excluir:", error);
-        alert("Erro ao excluir. Verifique sua conexão e tente novamente.");
+      alert("Treinamento excluído com sucesso!");
+
+      // Recarrega a tela imediatamente para o curso sumir
+      carregarDetalhesSetor();
     }
+  } catch (error) {
+    console.error("Erro ao excluir:", error);
+    alert("Erro ao excluir. Verifique sua conexão e tente novamente.");
+  }
 };
+// --- FUNÇÃO PARA PREPARAR A EDIÇÃO ---
+window.prepararEdicao = async function (evento, setorId, index) {
+  evento.stopPropagation(); // Não abre o acordeão
+
+  const docRef = doc(db, "setores", setorId);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const curso = docSnap.data().cursos[index];
+
+    // Preenche o modal com os dados atuais
+    document.getElementById("modal-titulo").value = curso.titulo;
+    document.getElementById("modal-video-nome").value =
+      curso.videos[0]?.titulo || "";
+    document.getElementById("modal-video-url").value =
+      curso.videos[0]?.url || "";
+    document.getElementById("modal-pdf-nome").value =
+      curso.pdfs[0]?.titulo || "";
+    document.getElementById("modal-pdf-url").value = curso.pdfs[0]?.url || "";
+
+    // Guarda o index para sabermos que estamos EDITANDO
+    document.getElementById("modal-edit-index").value = index;
+
+    // Muda o visual do modal para edição
+    document.querySelector(".modal-header h2").textContent =
+      "Editar Treinamento";
+    document.getElementById("modal-novo-curso").style.display = "flex";
+  }
+};
+
+// --- RESETAR MODAL AO ADICIONAR NOVO ---
+// Ajuste o clique do seu botão verde "+ Adicionar Treinamento" para limpar o index
+document.getElementById("btn-add-curso-setor").addEventListener("click", () => {
+  document.getElementById("form-curso-local").reset();
+  document.getElementById("modal-edit-index").value = "-1"; // -1 significa NOVO
+  document.querySelector(".modal-header h2").textContent = "Novo Treinamento";
+  document.getElementById("modal-novo-curso").style.display = "flex";
+});

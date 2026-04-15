@@ -1,28 +1,61 @@
-# 🚀 Portal de Treinamentos Corporativos - JEE
+# 🚀 JEE - Portal de Treinamentos Corporativos
 
 Plataforma web desenvolvida para centralizar, organizar e disponibilizar os treinamentos internos do Grupo JEE.
 
-O projeto evoluiu de uma estrutura estática para um **Software como Serviço (SaaS)** completo, utilizando banco de dados em nuvem em tempo real, autenticação corporativa de usuários e rastreamento de jornada de aprendizagem (LMS).
-
 ## ✨ Funcionalidades
 
-* **Autenticação Segura:** Login integrado com Firebase, com trava de segurança que restringe o acesso exclusivamente para e-mails corporativos (`@hortsoy.com.br`).
-* **Banco de Dados em Tempo Real:** Todo o conteúdo é gerenciado via Firebase Firestore, permitindo atualizações instantâneas em todos os dispositivos sem necessidade de recarregar a página.
-* **Painel Admin (In-Place):** Administradores credenciados podem adicionar, editar e excluir módulos de treinamento diretamente na tela do curso, através de janelas modais intuitivas.
+* **Autenticação Segura:** Acesso exclusivamente para e-mails `@hortsoy.com.br`.
+* **Banco de Dados:** Todo o conteúdo é gerenciado via Firebase Firestore.
+* **Painel Admin:** Administradores podem adicionar, editar e excluir treinamento diretamente na tela do curso.
 * **Rastreamento de Progresso (LMS):**
-  * Integração com a **YouTube IFrame API** para auditar a visualização, contabilizando a aula como concluída apenas após o usuário assistir a pelo menos 75% do vídeo.
+  * Integração com a **YouTube IFrame API** para auditar a visualização e contabilizando a aula como concluída.
   * Rastreamento de leitura dos materiais de apoio.
-  * Barra de progresso dinâmica calculando a porcentagem de conclusão de cada colaborador individualmente.
-* **Hospedagem Leve (Arquivos em Nuvem):** Os PDFs e manuais agora são inseridos diretamente via links externos compartilhados (Google Drive, OneDrive, etc.), mantendo a plataforma livre de limites de armazenamento e custos extras.
-* **Interface Adaptável:** Alternância inteligente de tema (Light/Dark Mode) que salva a preferência do usuário, e layout 100% responsivo para uso em smartphones.
+  * Barra de progresso calculando a porcentagem.
+* **Hospedagem Leve (Nuvem):** Os PDFs e Vídeos agora são inseridos diretamente via links externos compartilhados (Google Drive, OneDrive, etc.).
+* **Interface Adaptável:** Alternância de tema (Light/Dark).
 
+---
+
+## 📖 Manual do Administrador
+
+### ⚠️ Passo a Passo para Adicionar um Novo Curso
+
+1. **Autenticação:** Faça login na plataforma utilizando a conta de Administrador.
+2. **Navegação:** Na página inicial, clique no Setor onde deseja inserir o treinamento (ex: "Logística e Estoque").
+3. **Painel de Edição:** No topo da lista de cursos, clique no botão verde **"+ Adicionar Treinamento"** (este botão só é visível para administradores).
+4. **Preenchimento do Formulário:**
+   * **Título do Módulo:** O nome principal do agrupamento (Ex: *Módulo 1 - Introdução*).
+   * **Vídeos (Opcional):** Preencha o nome da aula e o link do vídeo (veja as regras de links abaixo).
+   * **PDFs (Opcional):** Preencha o nome do arquivo e o link de acesso.
+5. **Salvar:** Clique em "Salvar Treinamento". O banco de dados (Firestore) será atualizado e o curso aparecerá instantaneamente na tela.
+
+----
+
+### ⚠️ Regras para Links Externos (Vídeos e PDFs)
+
+Para manter a plataforma leve e sem custos de servidor, os arquivos pesados são gerenciados externamente. Siga estas regras ao preencher os formulários:
+
+#### 🎥 Para Vídeos
+* **Vídeos do YouTube:** Você pode colar qualquer link padrão do YouTube. O sistema fará a conversão automática para o formato correto.
+* **Vídeos Internos (OneDrive / SharePoint):** Não use o botão de "Compartilhar" comum. 
+  1. Abra o vídeo no OneDrive.
+  2. Clique em **"Compartilhar / Código de inserção"**.
+  3. No código gerado (ex: `<iframe src="https://...">`), copie **apenas a URL** que está entre aspas no campo `src`.
+  4. Cole essa URL no portal. O sistema criará um player.
+
+#### 📄 Para PDFs
+* Hospede o PDF no **Google Drive** ou no **OneDrive**.
+* Gere um link de compartilhamento que esteja como **"Qualquer pessoa com o link pode ver"** (ou restrito apenas para a organização).
+* Cole o link gerado no campo".
+
+---
 ## 🛠️ Tecnologias Utilizadas
 
-* **HTML5 & CSS3:** Estruturação semântica, variáveis CSS nativas, Flexbox, Glassmorphism e responsividade (Mobile First).
-* **JavaScript (Vanilla JS):** Manipulação do DOM, módulos ES6 e controle assíncrono (Async/Await).
-* **Firebase Auth:** Gerenciamento de usuários, proteção de rotas e controle de sessão.
-* **Firebase Firestore:** Banco de dados NoSQL baseado em documentos para CRUD de cursos.
-* **YouTube IFrame API:** Controle avançado e escuta de eventos dos vídeos incorporados.
+* **HTML5 & CSS3**
+* **JavaScript (Vanilla JS)** 
+* **Firebase Auth**
+* **Firebase Firestore**
+* **YouTube IFrame API**
 
 ## 📂 Estrutura do Projeto
 
@@ -37,3 +70,5 @@ hortsoytreinamentos/
 └── assets/
     ├── logos/          # Logomarcas (versões colorida e branca)
     └── icones/         # Ícones gerais da interface
+
+

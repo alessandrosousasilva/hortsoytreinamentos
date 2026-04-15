@@ -838,3 +838,13 @@ body.modo-escuro .contato-setor {
     opacity: 1;
     transform: scale(1.2); /* Dá uma leve aumentada quando passa o mouse */
 }
+
+.btn-editar {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.3s;
+}
+.btn-editar:hover { opacity: 1; transform: scale(1.1); }

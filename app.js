@@ -13,6 +13,7 @@ import {
   getDoc,
   updateDoc,
   arrayUnion,
+  setDoc,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -49,6 +50,17 @@ onAuthStateChanged(auth, (user) => {
     // Variável global para sabermos se é o admin
     window.isAdmin = email === emailAdmin;
 
+    // --- BUSCA O PROGRESSO DESTE USUÁRIO ---
+    window.progressoUsuario = {};
+    getDoc(doc(db, "progresso", email))
+      .then((snap) => {
+        if (snap.exists()) {
+          window.progressoUsuario = snap.data();
+        }
+      })
+      .catch((e) => console.error("Erro ao ler progresso", e));
+
+    // -----------------------------------------------------
     let nomeExibicao = user.displayName;
     if (!nomeExibicao) {
       try {
@@ -210,7 +222,7 @@ if (listaCursos) {
           setorEncontrado.nome;
         document.getElementById("descricao-setor").textContent =
           setorEncontrado.descricao;
-        // --- LÓGICA DO E-MAIL ---
+        // --- NOVA LÓGICA DO E-MAIL ---
         const caixaEmail = document.getElementById("caixa-email-setor");
         const linkEmail = document.getElementById("link-email-setor");
 
@@ -231,18 +243,33 @@ if (listaCursos) {
             "<p>Nenhum treinamento cadastrado para este setor ainda.</p>";
         } else {
           setorEncontrado.cursos.forEach((curso, index) => {
+            // 1. LÓGICA DA MATEMÁTICA (CONTA O TOTAL DE ITENS)
+            const totalItens =
+              (curso.videos ? curso.videos.length : 0) +
+              (curso.pdfs ? curso.pdfs.length : 0);
+            let itensConcluidos = 0;
+
             let listaVideosHTML = "";
             if (curso.videos && curso.videos.length > 0) {
-              curso.videos.forEach((video) => {
+              curso.videos.forEach((video, vIndex) => {
                 const videoId = obterIdYoutube(video.url);
                 const urlCapa = videoId
                   ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
                   : "";
 
+                // Cria um "CPF" único para este vídeo no banco de dados
+                const idUnico = `${setorId}_${index}_video_${vIndex}`;
+
+                // Se o usuário já assistiu, soma na matemática e muda o ícone para ✅
+                if (window.progressoUsuario[idUnico]) itensConcluidos++;
+                const iconeStatus = window.progressoUsuario[idUnico]
+                  ? "✅"
+                  : "🎥";
+
                 listaVideosHTML += `
                     <div class="item-video">
-                        <h4>🎥 ${video.titulo}</h4>
-                        <div class="video-container lazy-video" data-url="${video.url}" onclick="carregarVideo(this)" title="Clique para reproduzir">
+                        <h4>${iconeStatus} ${video.titulo}</h4>
+                        <div class="video-container lazy-video" data-url="${video.url}" data-id="${idUnico}" onclick="carregarVideoTrackeado(this)" title="Clique para reproduzir">
                             <img src="${urlCapa}" alt="Capa do vídeo">
                             <div class="btn-play">▶</div>
                         </div>
@@ -253,31 +280,50 @@ if (listaCursos) {
 
             let listaPdfsHTML = "";
             if (curso.pdfs && curso.pdfs.length > 0) {
-              curso.pdfs.forEach((pdf) => {
-                listaPdfsHTML += `<a href="${pdf.url}" target="_blank" class="btn-pdf">📄 ${pdf.titulo}</a>`;
+              curso.pdfs.forEach((pdf, pIndex) => {
+                const idUnico = `${setorId}_${index}_pdf_${pIndex}`;
+                if (window.progressoUsuario[idUnico]) itensConcluidos++;
+                const iconeStatus = window.progressoUsuario[idUnico]
+                  ? "✅"
+                  : "📄";
+
+                // Ao clicar no PDF, chama a função de registrar o progresso
+                listaPdfsHTML += `<a href="${pdf.url}" target="_blank" class="btn-pdf" onclick="registrarProgresso('${idUnico}')">${iconeStatus} ${pdf.titulo}</a>`;
               });
             }
 
-            // botões de Editar e Excluir apenas para o Administrador
+            // Calcula a porcentagem do módulo
+            const porcentagem =
+              totalItens === 0
+                ? 0
+                : Math.round((itensConcluidos / totalItens) * 100);
+
+            // Botoes do Admin (Lixeira e Editar)
             let botoesAdminHTML = "";
             if (window.isAdmin) {
               botoesAdminHTML = `
-        <div style="display: flex; gap: 8px;">
-            <button class="btn-editar" onclick="prepararEdicao(event, '${setorId}', ${index})" title="Editar Treinamento">✏️</button>
-            <button class="btn-excluir" onclick="deletarCurso(event, '${setorId}', ${index})" title="Excluir Treinamento">🗑️</button>
-        </div>
-    `;
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-editar" onclick="prepararEdicao(event, '${setorId}', ${index})" title="Editar Treinamento">✏️</button>
+                        <button class="btn-excluir" onclick="deletarCurso(event, '${setorId}', ${index})" title="Excluir Treinamento">🗑️</button>
+                    </div>
+                `;
             }
 
             const cursoHTML = `
-    <div class="curso-bloco" id="curso-${index}">
-        <div class="curso-cabecalho" onclick="alternarCurso('curso-${index}')" tabindex="0">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <h3>📚 ${curso.titulo}</h3>
-                ${botoesAdminHTML}
-            </div>
-            <span class="icone-expansao">▼</span>
-        </div>
+                <div class="curso-bloco" id="curso-${index}">
+                    <div class="curso-cabecalho" onclick="alternarCurso('curso-${index}')" tabindex="0">
+                        <div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                                <h3>📚 ${curso.titulo}</h3>
+                                ${botoesAdminHTML}
+                            </div>
+                            <div class="progresso-container">
+                                <div class="progresso-barra" style="width: ${porcentagem}%"></div>
+                            </div>
+                            <span class="progresso-texto">${porcentagem}% Concluído</span>
+                        </div>
+                        <span class="icone-expansao">▼</span>
+                    </div>
                     <div class="curso-conteudo">
                         <div class="area-videos">${listaVideosHTML}</div>
                         <div class="acoes-curso">${listaPdfsHTML}</div>
@@ -506,3 +552,76 @@ document.getElementById("btn-add-curso-setor").addEventListener("click", () => {
   document.querySelector(".modal-header h2").textContent = "Novo Treinamento";
   document.getElementById("modal-novo-curso").style.display = "flex";
 });
+
+// ==========================================
+// --- LÓGICA DE PROGRESSO DO USUÁRIO ---
+// ==========================================
+
+// 1. Injeta a API oficial do Youtube "escondida" na página
+const tagYoutube = document.createElement('script');
+tagYoutube.src = "https://www.youtube.com/iframe_api";
+const primeiraTag = document.getElementsByTagName('script')[0];
+primeiraTag.parentNode.insertBefore(tagYoutube, primeiraTag);
+
+// 2. Salva o progresso no Banco de Dados
+window.registrarProgresso = async function(idUnico) {
+    if (!window.progressoUsuario) window.progressoUsuario = {};
+    if (window.progressoUsuario[idUnico]) return; // Impede de salvar 2 vezes
+
+    window.progressoUsuario[idUnico] = true; // Salva na memória do navegador
+    const email = auth.currentUser.email;
+
+    try {
+        // Envia para o Firebase (Cria um documento com o email do usuario)
+        await setDoc(doc(db, "progresso", email), {
+            [idUnico]: true
+        }, { merge: true }); // O 'merge' apenas adiciona os novos, sem apagar os velhos
+        
+        console.log("Progresso salvo com sucesso!");
+        // Obs: A barra verde só vai encher visualmente quando ele recarregar a página 
+        // ou entrar no setor de novo. Isso evita que o vídeo seja interrompido do nada!
+    } catch (error) {
+        console.error("Erro ao salvar progresso:", error);
+    }
+};
+
+// 3. O Vídeo Inteligente que mede os 75%
+window.carregarVideoTrackeado = function(elementoHtml) {
+    const urlOriginal = elementoHtml.getAttribute("data-url");
+    const idUnico = elementoHtml.getAttribute("data-id");
+    const videoId = obterIdYoutube(urlOriginal);
+
+    const divId = `yt-${idUnico}`;
+    elementoHtml.innerHTML = `<div id="${divId}"></div>`;
+    elementoHtml.onclick = null;
+    elementoHtml.style.cursor = "default";
+
+    let jaContabilizou = false;
+
+    // Quando o usuário clica no play vermelho, o "Olheiro" do YT entra em ação
+    new YT.Player(divId, {
+        videoId: videoId,
+        playerVars: { 'autoplay': 1, 'rel': 0 },
+        events: {
+            'onStateChange': function(event) {
+                // Se o vídeo estiver TOCANDO (State = 1)
+                if (event.data == 1 && !jaContabilizou) {
+                    const player = event.target;
+                    
+                    // Cria um cronômetro invisível que checa a cada 5 segundos
+                    const checador = setInterval(() => {
+                        const tempoAtual = player.getCurrentTime();
+                        const duracao = player.getDuration();
+                        
+                        // Se bateu 75% da duração do vídeo (0.75)
+                        if (duracao > 0 && (tempoAtual / duracao) >= 0.75) {
+                            window.registrarProgresso(idUnico);
+                            jaContabilizou = true;
+                            clearInterval(checador); // Desliga o cronômetro para poupar memória
+                        }
+                    }, 5000); 
+                }
+            }
+        }
+    });
+};

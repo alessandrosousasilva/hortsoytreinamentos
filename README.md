@@ -27,7 +27,7 @@ Plataforma web desenvolvida para centralizar, organizar e disponibilizar os trei
    * **Título do Módulo:** O nome principal do agrupamento (Ex: *Módulo 1 - Introdução*).
    * **Vídeos (Opcional):** Preencha o nome da aula e o link do vídeo (veja as regras de links abaixo).
    * **PDFs (Opcional):** Preencha o nome do arquivo e o link de acesso.
-5. **Salvar:** Clique em "Salvar Treinamento". O banco de dados (Firestore) será atualizado e o curso aparecerá instantaneamente na tela.
+5. **Salvar:** Clique em "Salvar Treinamento". O banco de dados (Firestore) será atualizado.
 
 ----
 
@@ -39,15 +39,16 @@ Para manter a plataforma leve e sem custos de servidor, os arquivos pesados são
 * **Vídeos do YouTube:** Você pode colar qualquer link padrão do YouTube. O sistema fará a conversão automática para o formato correto.
 * **Vídeos Internos (OneDrive / SharePoint):** Não use o botão de "Compartilhar" comum. 
   1. Abra o vídeo no OneDrive.
-  2. Clique em **"Compartilhar / Código de inserção"**.
-  3. No código gerado (ex: `<iframe src="https://...">`), copie **apenas a URL** que está entre aspas no campo `src`.
-  4. Cole essa URL no portal. O sistema criará um player.
+  2. Clique em **"Compartilhar -> Código de inserção"**.
+  3. No código gerado (ex: `<iframe src="https://...">`), copie **apenas a URL** que está entre aspas `src`.
+  4. Cole essa URL no portal.
 
 #### 📄 Para PDFs
 * Hospede o PDF no **Google Drive** ou no **OneDrive**.
 * Gere um link de compartilhamento que esteja como **"Qualquer pessoa com o link pode ver"** (ou restrito apenas para a organização).
-* Cole o link gerado no campo".
+* Cole o link gerado".
 
+---
 ---
 ## 🛠️ Tecnologias Utilizadas
 
@@ -70,5 +71,3 @@ hortsoytreinamentos/
 └── assets/
     ├── logos/          # Logomarcas (versões colorida e branca)
     └── icones/         # Ícones gerais da interface
-
-

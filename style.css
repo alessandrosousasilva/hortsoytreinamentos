@@ -530,93 +530,108 @@ body.modo-escuro .contato-setor {
    RESPONSIVIDADE (MOBILE & TABLETS)
 ========================================= */
 @media (max-width: 768px) {
-  /* 1. O Cabeçalho Principal */
-  .cabecalho {
-    flex-wrap: wrap;
-    padding: 15px 15px; /* Reduzido o espaço lateral */
-    position: relative; /* Essencial para o botão de tema flutuar */
-    justify-content: center; /* Centraliza a logo */
-  }
-  .cabecalho-cursos {
-    padding: 15px 15px; /* Padding mobile reduzido */
-  }
+    /* --- 1. O Cabeçalho Principal --- */
+    .cabecalho, .cabecalho-cursos {
+        flex-wrap: wrap;
+        padding: 15px;
+        justify-content: space-between;
+    }
 
-  .logo-container {
-    width: 100%; /* Força a ocupar a linha toda para garantir o centro */
-    justify-content: left; /* Centraliza os itens dentro da logo */
-  }
+    .logo-container {
+        width: auto;
+    }
 
-  .logo-container img {
-    height: 70px; /* Logo mobile ligeiramente menor */
-  }
+    .logo-container img {
+        height: 45px; /* Logo menor no celular para não espremer o perfil */
+    }
 
-  .separador-logo {
-    height: 70px;
-  }
+    .separador-logo { 
+        display: none; /* Esconde o traço no mobile para ganhar espaço */
+    } 
 
-  .texto-treinamentos {
-    font-size: 1.2rem; /* Título um pouco menor */
-  }
+    .texto-treinamentos { font-size: 1.1rem; }
+    .texto-subtitulo { font-size: 0.75rem; }
 
-  .texto-subtitulo {
-    font-size: 0.75rem;
-  }
+    /* Barra de pesquisa vai para a linha de baixo, ocupando 100% */
+    .barra-pesquisa-header {
+        order: 3;
+        width: 100%;
+        max-width: 100%;
+        margin: 15px 0 0 0;
+    }
 
-  .btn-tema {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    padding: 6px 10px;
-    font-size: 0.8rem;
-  }
+    /* --- 2. Página Interna: Cabeçalho do Setor --- */
+    .cabecalho-setor {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
 
-  /* Conserta o vazamento da barra de pesquisa do cabeçalho */
-  .barra-pesquisa-header {
-    order: 3;
-    width: 100%;
-    max-width: 100%;
-    margin: 15px 0 0 0;
-  }
+    .info-setor h1 { font-size: 1.5rem; }
 
-  /* 2. Página Interna: Cabeçalho do Setor */
-  .cabecalho-setor {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-  }
+    .pesquisa-setor { width: 100%; }
+    .pesquisa-setor input { width: 100%; }
 
-  .info-setor h1 {
-    font-size: 1.6rem;
-  }
+    /* --- 3. Ajustes nos Módulos de Curso (Acordeão) --- */
+    .curso-cabecalho {
+        padding: 15px;
+        flex-direction: column; /* Empilha o título, botões e barra no mobile */
+        align-items: flex-start;
+        position: relative;
+    }
 
-  /* Conserta a barra de pesquisa interna vazando da tela */
-  .pesquisa-setor {
-    width: 100%;
-  }
+    .curso-cabecalho > div {
+        width: 100%; /* Faz a div do título e barra ocupar toda a largura */
+        margin-right: 0;
+    }
 
-  .pesquisa-setor input {
-    width: 100%;
-    max-width: 100%; /* Força a respeitar o limite da tela */
-  }
+    .curso-cabecalho h3 {
+        font-size: 1.05rem;
+        margin-bottom: 15px;
+        padding-right: 30px; /* Evita que o texto encoste na setinha */
+    }
 
-  /* 3. Ajustes nos Módulos e Botões (Acordeão) */
-  .curso-cabecalho {
-    padding: 15px;
-  }
+    .icone-expansao {
+        position: absolute;
+        top: 20px;
+        right: 15px;
+    }
 
-  .curso-cabecalho h3 {
-    font-size: 1.05rem;
-  }
+    /* --- 4. Botões de Ação (PDFs e Admin) --- */
+    .acoes-curso {
+        justify-content: center;
+        flex-direction: column;
+        gap: 10px;
+    }
 
-  .acoes-curso {
-    justify-content: center;
-  }
+    .btn-pdf {
+        width: 100%;
+        text-align: center;
+        margin-top: 5px;
+    }
 
-  .btn-pdf {
-    width: 100%;
-    text-align: center;
-    margin-top: 10px;
-  }
+    /* Aumenta a área de clique da lixeira e lápis no touch do celular */
+    .btn-editar, .btn-excluir {
+        padding: 10px;
+        font-size: 1.2rem;
+    }
+
+    /* --- 5. Modal de Adição/Edição --- */
+    .modal-conteudo {
+        padding: 20px;
+        width: 95%;
+        max-height: 90vh; /* Evita que o modal passe da tela se tiver teclado aberto */
+        overflow-y: auto; /* Adiciona rolagem interna caso a tela do celular seja pequena */
+    }
+}
+
+@media (max-width: 400px) {
+    .titulos-plataforma { display: none; } /* Esconde o texto da logo para caber o menu de perfil */
+    .logo-container img { height: 40px; }
+    
+    .grid-setores {
+        grid-template-columns: 1fr; /* Força 1 card por linha */
+    }
 }
 
 /* --- Cabeçalho Simplificado (Apenas para cursos.html) --- */

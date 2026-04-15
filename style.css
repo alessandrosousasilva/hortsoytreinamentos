@@ -825,26 +825,60 @@ body.modo-escuro .contato-setor {
 
 /* --- Botão de Excluir (Admin) --- */
 .btn-excluir {
-    background: none;
-    border: none;
-    font-size: 1.1rem;
-    cursor: pointer;
-    opacity: 0.5;
-    transition: opacity 0.3s, transform 0.2s;
-    padding: 5px;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  opacity: 0.5;
+  transition:
+    opacity 0.3s,
+    transform 0.2s;
+  padding: 5px;
 }
 
 .btn-excluir:hover {
-    opacity: 1;
-    transform: scale(1.2); /* Dá uma leve aumentada quando passa o mouse */
+  opacity: 1;
+  transform: scale(1.2); /* Dá uma leve aumentada quando passa o mouse */
 }
 
 .btn-editar {
-    background: none;
-    border: none;
-    font-size: 1rem;
-    cursor: pointer;
-    opacity: 0.6;
-    transition: 0.3s;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: 0.3s;
 }
-.btn-editar:hover { opacity: 1; transform: scale(1.1); }
+.btn-editar:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* --- Barra de Progresso do Curso --- */
+.progresso-container {
+    width: 100%;
+    background-color: var(--borda-card);
+    border-radius: 10px;
+    height: 8px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progresso-barra {
+    height: 100%;
+    background-color: var(--cor-verde-hortsoy);
+    transition: width 0.5s ease-in-out;
+}
+
+.progresso-texto {
+    font-size: 0.8rem;
+    color: var(--texto-secundario);
+    margin-top: 5px;
+    display: block;
+}
+
+/* Deixa o cabeçalho do curso mais espaçoso para caber a barra */
+.curso-cabecalho > div {
+    flex-grow: 1; /* Faz a barra ocupar todo o espaço possível */
+    margin-right: 20px;
+}

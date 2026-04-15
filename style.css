@@ -409,6 +409,10 @@ body.modo-escuro .contato-setor {
   overflow: hidden;
   margin-bottom: 20px;
 }
+.video-container video {
+    background-color: #000;
+    object-fit: contain; /* Garante que o vídeo não fique esticado */
+}
 .video-container iframe {
   position: absolute;
   top: 0;
@@ -841,6 +845,7 @@ body.modo-escuro .contato-setor {
   transform: scale(1.2); /* Dá uma leve aumentada quando passa o mouse */
 }
 
+/* --- Botão de Editar (Admin) --- */
 .btn-editar {
   background: none;
   border: none;

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | JEE Treinamentos</title>
+  <title>JEE Treinamentos</title>
   <link rel="stylesheet" href="style.css">
   <link rel="shortcut icon" type="imagex/png" href="/assets/icones/icon-livro.ico">
   <style>
@@ -115,13 +115,30 @@
           <label for="email">E-mail Corporativo</label>
           <input type="email" id="email" placeholder="nome.sobrenome@hortsoy.com.br" required>
         </div>
+        
         <div class="form-grupo">
           <label for="senha">Senha</label>
           <input type="password" id="senha" placeholder="••••••••" required>
         </div>
+
+        <div id="bloco-esqueci-senha" style="text-align: right; margin-top: -10px; margin-bottom: 15px;">
+          <a href="#" id="link-esqueci-senha"
+            style="font-size: 0.85rem; color: var(--texto-secundario); text-decoration: underline;">Esqueceu a senha?</a>
+        </div>
+
+        <div class="form-grupo" id="grupo-confirma" style="display: none;">
+          <label for="senha-confirma">Confirmar Senha</label>
+          <input type="password" id="senha-confirma" placeholder="••••••••">
+        </div>
+
         <button type="submit" class="btn-entrar" id="btn-submit">Acessar Plataforma</button>
-        <div id="mensagem-erro" class="erro-msg">E-mail ou Senha incorretos.</div>
+        <div id="mensagem-erro" class="erro-msg">E-mail ou senha incorretos.</div>
+
+        <p style="margin-top: 20px; font-size: 0.9rem;">
+          <a href="#" id="link-modo" style="color: var(--cor-verde-hortsoy); text-decoration: none; font-weight: bold;">Primeiro acesso? Crie sua senha aqui.</a>
+        </p>
       </form>
+
     </div>
   </div>
 

@@ -32,7 +32,11 @@ const db = getFirestore(app);
 
 // --- PROTEÇÃO DE ROTA E MENU DO USUÁRIO ---
 onAuthStateChanged(auth, (user) => {
-  const paginaAtual = window.location.pathname.split("/").pop();
+  let paginaAtual = window.location.pathname.split("/").pop();
+
+  if (paginaAtual === "" || paginaAtual === "/") {
+    paginaAtual = "login.html";
+  }
 
   if (!user && paginaAtual !== "login.html" && paginaAtual !== "") {
     window.location.href = "login.html";

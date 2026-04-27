@@ -242,19 +242,10 @@ window.carregarDetalhesSetor = async function () {
     if (docSnap.exists()) {
       const setorEncontrado = docSnap.data();
 
-      document.getElementById("titulo-setor").textContent = setorEncontrado.nome;
-      document.getElementById("descricao-setor").textContent = setorEncontrado.descricao;
-      
-      const caixaEmail = document.getElementById("caixa-email-setor");
-      const linkEmail = document.getElementById("link-email-setor");
-
-      if (setorEncontrado.emailResponsavel) {
-        linkEmail.textContent = setorEncontrado.emailResponsavel;
-        linkEmail.href = `mailto:${setorEncontrado.emailResponsavel}`;
-        caixaEmail.style.display = "inline-flex";
-      } else {
-        caixaEmail.style.display = "none";
-      }
+      document.getElementById("titulo-setor").textContent =
+        setorEncontrado.nome;
+      document.getElementById("descricao-setor").textContent =
+        setorEncontrado.descricao;
 
       listaCursos.innerHTML = "";
       if (!setorEncontrado.cursos || setorEncontrado.cursos.length === 0) {

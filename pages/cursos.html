@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JEE | Treinamentos</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="shortcut icon" type="imagex/png" href="/assets/icones/icon-livro.ico">
+</head>
+
+<body class="modo-claro">
+
+  <!-- Cabeçalho comum a todas as páginas, com logo, título e menu de usuário -->
+  <header class="cabecalho-cursos">
+    <div class="logo-container">
+      <a href="../index.html" ...><img id="logo-hortsoy" src="../assets/logos/jee-preto.png" alt="Logo HortSoy"></a>
+
+      <div class="separador-logo"></div>
+
+      <div class="titulos-plataforma">
+        <span class="texto-treinamentos">Treinamentos</span>
+        <span class="texto-subtitulo">Grupo HortSoy</span>
+      </div>
+    </div>
+
+    <!-- Barra de pesquisa para setores -->
+    <div class="acoes-header">
+      <button id="btn-tema" class="btn-tema">🌙</button>
+
+      <div class="menu-usuario">
+        <div class="avatar-usuario" id="avatar-mini" title="Meu Perfil">?</div>
+
+        <div class="dropdown-usuario" id="dropdown-perfil">
+          <div class="dropdown-topo">
+            <span class="dropdown-empresa">Grupo HortSoy</span>
+            <button id="btn-admin" class="btn-link"
+              style="display: none; color: #009a50; font-weight: bold; margin-right: 10px;">Painel Admin</button>
+            <button id="btn-sair" class="btn-link">Sair</button>
+          </div>
+          <div class="dropdown-corpo">
+            <div class="avatar-grande" id="avatar-grande">?</div>
+            <div class="info-usuario">
+              <strong id="nome-usuario">Carregando...</strong>
+              <span id="email-usuario">carregando@hortsoy.com.br</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Conteúdo específico da página de cursos -->
+  <main class="container">
+    <a href="../index.html" class="btn-voltar">← Voltar</a>
+
+    <div class="cabecalho-setor">
+      <div class="info-setor">
+        <h1 id="titulo-setor">Carregando...</h1>
+        <p id="descricao-setor"></p>
+      </div>
+
+      <div class="pesquisa-setor">
+        <input type="text" id="input-pesquisa-curso" placeholder="Buscar curso, vídeo ou PDF...">
+      </div>
+    </div>
+
+    <!-- Lista de cursos será carregada aqui -->
+    <button id="btn-add-curso-setor" class="btn-novo-curso" style="display: none;">Adicionar Treinamento</button>
+    <div class="lista-cursos" id="lista-cursos">
+    </div>
+
+    <!-- Modal para adicionar/editar curso -->
+    <div id="modal-novo-curso" class="modal-overlay" style="display: none;">
+      <div class="modal-conteudo">
+        <div class="modal-header">
+          <h2>Novo Treinamento</h2>
+          <button class="btn-fechar" id="btn-fechar-modal">&times;</button>
+        </div>
+    
+        <form id="form-curso-local">
+          <input type="hidden" id="modal-edit-index" value="-1">
+    
+          <div class="form-grupo">
+            <label for="modal-titulo">Título do Módulo/Treinamento</label>
+            <input type="text" id="modal-titulo" placeholder="Ex: Módulo 1 - Introdução" required>
+          </div>
+    
+          <div class="sessao-modal">
+            <div class="cabecalho-dinamico">
+              <label>Aulas (Vídeos)</label>
+              <button type="button" class="btn-add-linha" onclick="addLinhaVideo()">+ Adicionar Vídeo</button>
+            </div>
+            <div id="container-videos">
+            </div>
+          </div>
+    
+          <div class="sessao-modal" style="margin-top: 15px;">
+            <div class="cabecalho-dinamico">
+              <label>Arquivos (PDFs)</label>
+              <button type="button" class="btn-add-linha" onclick="addLinhaPdf()">+ Adicionar PDF</button>
+            </div>
+            <div id="container-pdfs">
+            </div>
+          </div>
+    
+          <button type="submit" id="btn-salvar-modal" class="btn-novo-curso"
+            style="width: 100%; margin-top: 20px; padding: 15px; font-size: 1.1rem;">Salvar Treinamento</button>
+        </form>
+      </div>
+    </div>
+    </div>
+  </main>
+
+  <script type="module" src="../app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JEE Treinamentos</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="shortcut icon" type="imagex/png" href="/assets/icones/icon-livro.ico">
+  <style>
+    .container-login {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: var(--fundo-pagina);
+    }
+
+    .caixa-login {
+      background-color: var(--fundo-card);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      border-top: 4px solid var(--cor-verde-hortsoy);
+    }
+
+    .caixa-login img {
+      height: 60px;
+      margin-bottom: 10px;
+    }
+
+    .caixa-login h2 {
+      color: var(--texto-principal);
+      margin-bottom: 5px;
+      font-size: 1.5rem;
+    }
+
+    .caixa-login p {
+      color: var(--texto-secundario);
+      font-size: 0.9rem;
+      margin-bottom: 25px;
+    }
+
+    .form-grupo {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .form-grupo label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: var(--texto-principal);
+      font-size: 0.9rem;
+    }
+
+    .form-grupo input,
+    .form-grupo select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid var(--borda-card);
+      border-radius: 8px;
+      font-size: 1rem;
+      background-color: var(--fundo-pagina);
+      color: var(--texto-principal);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .form-grupo input:focus,
+    .form-grupo select:focus {
+      border-color: var(--cor-verde-hortsoy);
+    }
+
+    .btn-entrar {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--cor-verde-hortsoy);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+    }
+
+    .btn-entrar:hover {
+      background-color: var(--cor-verde-escuro);
+    }
+
+    .erro-msg {
+      color: #E53935;
+      font-size: 0.85rem;
+      margin-top: 15px;
+      display: none;
+      font-weight: bold;
+    }
+  </style>
+
+</head>
+
+<body class="modo-claro">
+
+  <div class="container-login">
+    <div class="caixa-login">
+      <img src="../assets/logos/jee-preto.png" alt="Logo JEE" id="logo-login">
+      <h2>Portal de Treinamentos</h2>
+      <p>Acesso exclusivo para colaboradores.</p>
+
+      <form id="form-login">
+        <div class="form-grupo">
+          <label for="email">E-mail Corporativo</label>
+          <input type="email" id="email" placeholder="nome.sobrenome@hortsoy.com.br" required>
+        </div>
+
+        <div class="form-grupo">
+          <label for="senha">Palavra-passe (Senha)</label>
+          <input type="password" id="senha" placeholder="••••••••" required>
+        </div>
+
+        <div id="bloco-esqueci-senha" style="text-align: right; margin-top: -10px; margin-bottom: 15px;">
+          <a href="#" id="link-esqueci-senha"
+            style="font-size: 0.85rem; color: var(--texto-secundario); text-decoration: underline;">Esqueceu a
+            senha?</a>
+        </div>
+
+        <div class="form-grupo" id="grupo-confirma" style="display: none;">
+          <label for="senha-confirma">Confirmar Senha</label>
+          <input type="password" id="senha-confirma" placeholder="••••••••">
+        </div>
+
+        <div class="form-grupo" id="grupo-setor" style="display: none;">
+          <label for="setor-usuario">O seu Setor</label>
+          <select id="setor-usuario" style="background-color: var(--fundo-card);">
+            <option value="">Selecione o seu setor...</option>
+            <option value="logistica">Logística e Estoque</option>
+            <option value="financeiro">Financeiro</option>
+            <option value="rh">Recursos Humanos</option>
+            <option value="processos">Processos e Operações</option>
+            <option value="financeiro">Financeiro</option>
+            <option value="contabilidade">Contabilidade</option>
+            <option value="credito">Crédito e Cobrança</option>
+            <option value="Tecnologia">Tecnologia e Inovação</option>
+            <option value="operacoes">Operações Estruturadas</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-entrar" id="btn-submit">Acessar Plataforma</button>
+        <div id="mensagem-erro" class="erro-msg">E-mail ou senha incorretos.</div>
+
+        <p style="margin-top: 20px; font-size: 0.9rem;">
+          <a href="#" id="link-modo"
+            style="color: var(--cor-verde-hortsoy); text-decoration: none; font-weight: bold;">Primeiro acesso? Crie a
+            sua senha aqui.</a>
+        </p>
+
+      </form>
+
+    </div>
+  </div>
+
+  <script type="module" src="../js/auth.js"></script>
+</body>
+
+</html>

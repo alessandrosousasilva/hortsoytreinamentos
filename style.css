@@ -89,8 +89,19 @@ body.modo-escuro .cabecalho.efeito-rolagem {
 }
 
 .logo-container img {
-  height: 70px;
-  width: auto;
+    height: 70px;
+    width: auto;
+    cursor: pointer;
+}
+
+.logo-container a {
+    display: flex;
+    align-items: center;
+    transition: opacity 0.2s;
+}
+
+.logo-container a:hover {
+    opacity: 0.8; /* Dá um feedback visual de clique */
 }
 
 .separador-logo {
@@ -527,6 +538,193 @@ body.modo-escuro .contato-setor {
 }
 
 /* =========================================
+   PAINEL DO ADMINISTRADOR (TABELA)
+========================================= */
+.tabela-admin {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: var(--fundo-card);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.tabela-admin th, .tabela-admin td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--borda-card);
+    color: var(--texto-principal);
+}
+
+.tabela-admin th {
+    background-color: rgba(0, 154, 80, 0.1); /* Fundo verde clarinho */
+    color: var(--cor-verde-hortsoy);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.tabela-admin tr:last-child td {
+    border-bottom: none;
+}
+
+.tabela-admin tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Botão de Exportar no padrão do Excel */
+.btn-exportar {
+    background-color: #107c41; /* Verde oficial do Microsoft Excel */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 10px rgba(16, 124, 65, 0.3);
+}
+
+.btn-exportar:hover {
+    background-color: #0b5e31;
+    transform: translateY(-2px);
+}
+
+/* Modo Escuro para a Tabela */
+body.modo-escuro .tabela-admin tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* =========================================
+   SEÇÃO DE TIRA DÚVIDAS (FAQ)
+========================================= */
+.faq-container {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.faq-item {
+  background-color: var(--fundo-card);
+  border: 1px solid var(--borda-card);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.faq-item:hover {
+  border-color: var(--cor-verde-hortsoy);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.faq-pergunta {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background-color: var(--fundo-card);
+  transition: background-color 0.2s;
+}
+
+.faq-pergunta:hover {
+  background-color: rgba(0, 154, 80, 0.05);
+}
+
+.faq-pergunta h3 {
+  font-size: 1.1rem;
+  color: var(--texto-principal);
+  font-weight: 600;
+  margin: 0;
+}
+
+.faq-resposta {
+  display: none; /* Escondido por padrão */
+  padding: 0 20px 20px 20px;
+  color: var(--texto-secundario);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  border-top: 1px dashed var(--borda-card);
+  margin-top: 10px;
+  padding-top: 15px;
+}
+
+/* --- Lógica de Expandir o FAQ --- */
+.faq-item.aberto .faq-resposta {
+  display: block;
+}
+
+.faq-item.aberto .icone-expansao {
+  transform: rotate(180deg);
+  color: var(--cor-verde-hortsoy);
+}
+
+/* =========================================
+   ESTILO DO FORMULÁRIO DO MODAL
+========================================= */
+.modal-conteudo .form-grupo {
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.modal-conteudo .form-grupo label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: var(--texto-principal);
+  font-size: 0.9rem;
+}
+
+.modal-conteudo .form-grupo input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid var(--borda-card);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: var(--fundo-pagina);
+  color: var(--texto-principal);
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.modal-conteudo .form-grupo input:focus {
+  border-color: var(--cor-verde-hortsoy);
+  box-shadow: 0 0 0 3px rgba(0, 154, 80, 0.1);
+}
+
+.modal-conteudo .form-grupo input::placeholder {
+  color: var(--texto-secundario);
+  opacity: 0.6;
+}
+
+/* Agrupa os campos (Nome e Link) lado a lado */
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-row .form-grupo {
+  flex: 1; /* Faz as duas colunas terem exatamente o mesmo tamanho */
+}
+
+/* No telemóvel, os campos ficam um debaixo do outro novamente */
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+
+/* =========================================
    RESPONSIVIDADE (MOBILE & TABLETS)
 ========================================= */
 @media (max-width: 768px) {
@@ -901,4 +1099,80 @@ body.modo-escuro .contato-setor {
 .curso-cabecalho > div {
     flex-grow: 1; /* Faz a barra ocupar todo o espaço possível */
     margin-right: 20px;
+}
+
+/* =========================================
+   FORMULÁRIO DINÂMICO (MÚLTIPLOS VÍDEOS/PDFS)
+========================================= */
+.sessao-modal {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--borda-card);
+  padding: 15px;
+  border-radius: 8px;
+}
+
+body.modo-escuro .sessao-modal {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.cabecalho-dinamico {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cabecalho-dinamico label {
+  margin: 0 !important;
+  color: var(--cor-verde-hortsoy) !important;
+  font-size: 1rem !important;
+}
+
+.btn-add-linha {
+  background: none;
+  border: 1px dashed var(--cor-verde-hortsoy);
+  color: var(--cor-verde-hortsoy);
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.btn-add-linha:hover {
+  background: rgba(0, 154, 80, 0.1);
+}
+
+.linha-dinamica {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--borda-card);
+}
+
+.linha-dinamica:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.btn-remover-linha {
+  background: none;
+  border: none;
+  color: #E53935;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0 10px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.btn-remover-linha:hover {
+  opacity: 1;
+}
+
+/* Ajuste fino para a Lixeira ficar alinhada com os campos */
+@media (min-width: 601px) {
+  .linha-dinamica { align-items: center; }
+  .btn-remover-linha { margin-top: 15px; }
 }

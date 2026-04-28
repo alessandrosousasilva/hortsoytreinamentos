@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do Administrador - HortSoy</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
+  <header class="cabecalho-cursos">
+    <div class="logo-container">
+      <a href="../index.html" ...><img id="logo-hortsoy" src="../assets/logos/jee-preto.png" alt="Logo HortSoy"></a>
+
+      <div class="separador-logo"></div>
+      <div class="titulos-plataforma">
+        <span class="texto-treinamentos">Painel de Gestão</span>
+        <span class="texto-subtitulo">Acesso Restrito</span>
+      </div>
+    </div>
+    <div class="acoes-header">
+      <button id="btn-tema" class="btn-tema" style="margin-right: 15px;">🌙</button>
+    
+      <a href="../index.html" class="btn-voltar" style="margin: 0;">← Voltar ao Portal</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="cabecalho-setor" style="align-items: center; border-bottom: none; padding-bottom: 0;">
+      <div class="info-setor">
+        <h1>📊 Relatório de Engajamento</h1>
+        <p style="color: var(--texto-secundario); margin-top: 5px;">Acompanhe o progresso de treinamento dos
+          colaboradores.</p>
+      </div>
+
+      <button class="btn-exportar" onclick="exportarExcel()">
+        <span>📊</span> Baixar Relatório (Excel)
+      </button>
+    </div>
+
+    <div style="margin-top: 20px; margin-bottom: 20px;">
+      <input type="text" id="filtro-usuarios" placeholder="🔍 Pesquisar por e-mail ou setor..."
+        style="width: 100%; max-width: 400px; padding: 12px 20px; border-radius: 8px; border: 2px solid var(--borda-card); background: var(--fundo-card); color: var(--texto-principal); outline: none; font-size: 1rem;">
+    </div>
+
+    <div style="overflow-x: auto; border: 1px solid var(--borda-card); border-radius: 8px;">
+      <table class="tabela-admin">
+        <thead>
+          <tr>
+            <th>Colaborador / Setor</th>
+            <th>Progresso no Setor</th>
+            <th>Progresso Global</th>
+            <th style="width: 80px; text-align: center;">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-corpo">
+          <tr>
+            <td colspan="4" style="text-align: center; padding: 30px; color: var(--texto-secundario);">
+              ⏳ Carregando dados do banco...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script type="module" src="../js/admin.js"></script>
+</body>
+
+</html>

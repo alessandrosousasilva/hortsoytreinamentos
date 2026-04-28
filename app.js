@@ -30,35 +30,32 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // ==========================================
-// --- PROTEÇÃO DE ROTA E MENU DO USUÁRIO ---
+// --- PROTEÇÃO DE ROTA E MENU DO UTILIZADOR ---
 // ==========================================
 onAuthStateChanged(auth, (user) => {
   let paginaAtual = window.location.pathname.split("/").pop();
 
-  // 1. CORREÇÃO NETLIFY: Se a URL estiver limpa, consideramos a página inicial
   if (paginaAtual === "" || paginaAtual === "/") {
     paginaAtual = "index.html";
   }
 
-  // 2. TRAVA: Se NÃO tem usuário logado e não está na tela de login, chuta pro login
+  // CORREÇÃO: Redirecionamento para Login usando caminho absoluto
   if (!user && paginaAtual !== "login.html") {
-    window.location.href = "login.html";
-    return; // O return para a execução do código aqui!
-  }
-
-  // 3. TRAVA: Se TEM usuário logado e tenta acessar o login, manda pra home
-  if (user && paginaAtual === "login.html") {
-    window.location.href = "index.html";
+    window.location.href = "/pages/login.html";
     return;
   }
 
-  // 4. SUCESSO: O usuário passou pelas travas! Carregar os dados dele.
+  // CORREÇÃO: Redirecionamento para Home usando caminho absoluto
+  if (user && paginaAtual === "login.html") {
+    window.location.href = "/index.html";
+    return;
+  }
+
   if (user && paginaAtual !== "login.html") {
     const email = user.email;
-    const emailAdmin = "admin@hortsoy.com.br"; // E-mail do Administrador
+    const emailAdmin = "admin@hortsoy.com.br";
     window.isAdmin = email === emailAdmin;
 
-    // --- BUSCA O PROGRESSO DESTE USUÁRIO ---
     window.progressoUsuario = {};
 
     getDoc(doc(db, "progresso", email))
@@ -66,28 +63,42 @@ onAuthStateChanged(auth, (user) => {
         if (snap.exists()) {
           window.progressoUsuario = snap.data();
         }
-        
-        // CORREÇÃO FIRESTORE: Só pede os dados do banco DEPOIS de confirmar o crachá
-        if (paginaAtual === "index.html" && typeof window.carregarSetores === "function") {
+
+        if (
+          paginaAtual === "index.html" &&
+          typeof window.carregarSetores === "function"
+        )
           window.carregarSetores();
-        } else if (paginaAtual === "cursos.html" && typeof window.carregarDetalhesSetor === "function") {
+        else if (
+          paginaAtual === "cursos.html" &&
+          typeof window.carregarDetalhesSetor === "function"
+        )
           window.carregarDetalhesSetor();
-        }
       })
       .catch((e) => {
         console.error("Erro ao ler progresso", e);
-        // Tenta desenhar a tela mesmo se o progresso falhar
-        if (paginaAtual === "index.html" && typeof window.carregarSetores === "function") window.carregarSetores();
-        if (paginaAtual === "cursos.html" && typeof window.carregarDetalhesSetor === "function") window.carregarDetalhesSetor();
+        if (
+          paginaAtual === "index.html" &&
+          typeof window.carregarSetores === "function"
+        )
+          window.carregarSetores();
+        if (
+          paginaAtual === "cursos.html" &&
+          typeof window.carregarDetalhesSetor === "function"
+        )
+          window.carregarDetalhesSetor();
       });
 
-    // --- MONTA O NOME DO PERFIL ---
     let nomeExibicao = user.displayName;
     if (!nomeExibicao) {
       try {
         const partesNome = email.split("@")[0].split(".");
-        const nome = partesNome[0].charAt(0).toUpperCase() + partesNome[0].slice(1);
-        const sobrenome = partesNome.length > 1 ? partesNome[1].charAt(0).toUpperCase() + partesNome[1].slice(1) : "";
+        const nome =
+          partesNome[0].charAt(0).toUpperCase() + partesNome[0].slice(1);
+        const sobrenome =
+          partesNome.length > 1
+            ? partesNome[1].charAt(0).toUpperCase() + partesNome[1].slice(1)
+            : "";
         nomeExibicao = `${nome} ${sobrenome}`.trim();
       } catch (e) {
         nomeExibicao = "Colaborador";
@@ -112,7 +123,8 @@ onAuthStateChanged(auth, (user) => {
     if (btnAdmin && window.isAdmin) {
       btnAdmin.style.display = "inline-block";
       btnAdmin.addEventListener("click", () => {
-        window.location.href = "admin.html";
+        // CORREÇÃO: Caminho para o Painel Admin
+        window.location.href = "/pages/admin.html";
       });
 
       const btnAddCursoSetor = document.getElementById("btn-add-curso-setor");
@@ -135,7 +147,8 @@ onAuthStateChanged(auth, (user) => {
     if (btnSair) {
       btnSair.addEventListener("click", () => {
         signOut(auth).then(() => {
-          window.location.href = "login.html";
+          // CORREÇÃO: Redirecionamento ao Sair
+          window.location.href = "/pages/login.html";
         });
       });
     }
@@ -149,9 +162,10 @@ const btnTema = document.getElementById("btn-tema");
 const body = document.body;
 const logoHortsoy = document.getElementById("logo-hortsoy");
 
+// CORREÇÃO: Logos agora usam caminhos absolutos /assets/...
 if (localStorage.getItem("tema") === "escuro") {
   body.classList.add("modo-escuro");
-  if (logoHortsoy) logoHortsoy.src = "assets/logos/jee-branco.png";
+  if (logoHortsoy) logoHortsoy.src = "/assets/logos/jee-branco.png";
   if (btnTema) btnTema.textContent = "☀️";
 }
 
@@ -160,11 +174,11 @@ if (btnTema) {
     body.classList.toggle("modo-escuro");
 
     if (body.classList.contains("modo-escuro")) {
-      if (logoHortsoy) logoHortsoy.src = "assets/logos/jee-branco.png";
+      if (logoHortsoy) logoHortsoy.src = "/assets/logos/jee-branco.png";
       btnTema.textContent = "☀️";
       localStorage.setItem("tema", "escuro");
     } else {
-      if (logoHortsoy) logoHortsoy.src = "assets/logos/jee-preto.png";
+      if (logoHortsoy) logoHortsoy.src = "/assets/logos/jee-preto.png";
       btnTema.textContent = "🌙";
       localStorage.setItem("tema", "claro");
     }
@@ -185,6 +199,69 @@ function aplicarEfeitoScroll(cabecalho) {
 aplicarEfeitoScroll(cabecalhoGeral);
 aplicarEfeitoScroll(cabecalhoCursos);
 
+// FAQ (Tira Dúvidas)
+window.alternarFaq = function (elementoClicado) {
+  const faqItem = elementoClicado.parentElement;
+  const jaEstaAberto = faqItem.classList.contains("aberto");
+  const todosFaqs = document.querySelectorAll(".faq-item");
+  todosFaqs.forEach((item) => item.classList.remove("aberto"));
+  if (!jaEstaAberto) {
+    faqItem.classList.add("aberto");
+  }
+};
+
+// ==========================================
+// --- FUNÇÕES DE LINHAS DINÂMICAS DO MODAL ---
+// ==========================================
+window.addLinhaVideo = function (nome = "", url = "") {
+  const container = document.getElementById("container-videos");
+  if (!container) return;
+  const idUnico = Date.now() + Math.random();
+
+  const html = `
+    <div class="form-row linha-dinamica" id="linha-${idUnico}" style="align-items: flex-start;">
+      <div class="form-grupo" style="margin-bottom:0;">
+        <input type="text" class="video-nome" placeholder="Nome da Aula" value="${nome}">
+      </div>
+      <div class="form-grupo" style="margin-bottom:0;">
+        <input type="text" class="video-url" placeholder="Link YouTube ou Código SharePoint" value="${url}">
+        <small style="color: var(--texto-secundario); font-size: 0.75rem; margin-top: 5px; display: block;">Entre no vídeo dentro do oneDrive, clique em <b>"Compartilhar"</b> e <b>"Código de Inserção" </b>e copie o (&lt;iframe&gt;).
+        </small>
+      </div>
+      <button type="button" class="btn-remover-linha" onclick="removerLinha('${idUnico}')" title="Remover Vídeo" style="margin-top: 10px;">🗑️</button>
+    </div>
+  `;
+  container.insertAdjacentHTML("beforeend", html);
+};
+
+window.addLinhaPdf = function (nome = "", url = "") {
+  const container = document.getElementById("container-pdfs");
+  if (!container) return;
+  const idUnico = Date.now() + Math.random();
+
+  // Mudamos type="url" para type="text" e adicionamos o <small> com a dica de compartilhamento
+  const html = `
+    <div class="form-row linha-dinamica" id="linha-${idUnico}" style="align-items: flex-start;">
+      <div class="form-grupo" style="margin-bottom:0;">
+        <input type="text" class="pdf-nome" placeholder="Nome do PDF" value="${nome}">
+      </div>
+      <div class="form-grupo" style="margin-bottom:0;">
+        <input type="text" class="pdf-url" placeholder="Link de Compartilhamento" value="${url}">
+        <small style="color: var(--texto-secundario); font-size: 0.75rem; margin-top: 5px; display: block;">
+          Clique em Compartilhar no arquivo (OneDrive/SharePoint) e cole o link direto aqui.
+        </small>
+      </div>
+      <button type="button" class="btn-remover-linha" onclick="removerLinha('${idUnico}')" title="Remover PDF" style="margin-top: 10px;">🗑️</button>
+    </div>
+  `;
+  container.insertAdjacentHTML("beforeend", html);
+};
+
+window.removerLinha = function (id) {
+  const elemento = document.getElementById(`linha-${id}`);
+  if (elemento) elemento.remove();
+};
+
 // ==========================================
 // --- RENDERIZAÇÃO DOS SETORES (HOME) ---
 // ==========================================
@@ -194,12 +271,12 @@ window.carregarSetores = async function () {
 
   try {
     const querySnapshot = await getDocs(collection(db, "setores"));
-    gridSetores.innerHTML = ""; 
+    gridSetores.innerHTML = "";
 
     querySnapshot.forEach((documento) => {
       const setor = documento.data();
       const cardHTML = `
-          <a href="cursos.html?setor=${setor.id}" class="card-setor">
+          <a href="/pages/cursos.html?setor=${setor.id}" class="card-setor">
               <div class="card-icone">${setor.icone}</div>
               <h2>${setor.nome}</h2>
               <p>${setor.descricao}</p>
@@ -209,7 +286,7 @@ window.carregarSetores = async function () {
     });
   } catch (erro) {
     console.error("Erro ao carregar do Firestore:", erro);
-    gridSetores.innerHTML = `<p style="text-align: center; color: red;">Erro ao carregar módulos. Verifique suas permissões.</p>`;
+    gridSetores.innerHTML = `<p style="text-align: center; color: red;">Erro ao carregar módulos. Verifique as permissões.</p>`;
   }
 };
 
@@ -220,7 +297,9 @@ if (inputPesquisa) {
     const cards = document.querySelectorAll(".card-setor");
     cards.forEach((card) => {
       const textoDoCard = card.innerText.toLowerCase();
-      card.style.display = textoDoCard.includes(termoPesquisado) ? "flex" : "none";
+      card.style.display = textoDoCard.includes(termoPesquisado)
+        ? "flex"
+        : "none";
     });
   });
 }
@@ -249,10 +328,13 @@ window.carregarDetalhesSetor = async function () {
 
       listaCursos.innerHTML = "";
       if (!setorEncontrado.cursos || setorEncontrado.cursos.length === 0) {
-        listaCursos.innerHTML = "<p>Nenhum treinamento cadastrado para este setor ainda.</p>";
+        listaCursos.innerHTML =
+          "<p>Nenhum treinamento cadastrado para este setor ainda.</p>";
       } else {
         setorEncontrado.cursos.forEach((curso, index) => {
-          const totalItens = (curso.videos ? curso.videos.length : 0) + (curso.pdfs ? curso.pdfs.length : 0);
+          const totalItens =
+            (curso.videos ? curso.videos.length : 0) +
+            (curso.pdfs ? curso.pdfs.length : 0);
           let itensConcluidos = 0;
 
           let listaVideosHTML = "";
@@ -262,7 +344,9 @@ window.carregarDetalhesSetor = async function () {
               const idUnico = `${setorId}_${index}_video_${vIndex}`;
 
               if (window.progressoUsuario[idUnico]) itensConcluidos++;
-              const iconeStatus = window.progressoUsuario[idUnico] ? "✅" : "🎥";
+              const iconeStatus = window.progressoUsuario[idUnico]
+                ? "✅"
+                : "🎥";
 
               let tagCapaHTML = "";
               if (videoId) {
@@ -287,13 +371,18 @@ window.carregarDetalhesSetor = async function () {
             curso.pdfs.forEach((pdf, pIndex) => {
               const idUnico = `${setorId}_${index}_pdf_${pIndex}`;
               if (window.progressoUsuario[idUnico]) itensConcluidos++;
-              const iconeStatus = window.progressoUsuario[idUnico] ? "✅" : "📄";
+              const iconeStatus = window.progressoUsuario[idUnico]
+                ? "✅"
+                : "📄";
 
               listaPdfsHTML += `<a href="${pdf.url}" target="_blank" class="btn-pdf" onclick="registrarProgresso('${idUnico}')">${iconeStatus} ${pdf.titulo}</a>`;
             });
           }
 
-          const porcentagem = totalItens === 0 ? 0 : Math.round((itensConcluidos / totalItens) * 100);
+          const porcentagem =
+            totalItens === 0
+              ? 0
+              : Math.round((itensConcluidos / totalItens) * 100);
 
           let botoesAdminHTML = "";
           if (window.isAdmin) {
@@ -330,7 +419,8 @@ window.carregarDetalhesSetor = async function () {
         });
       }
     } else {
-      document.getElementById("titulo-setor").textContent = "Setor não encontrado";
+      document.getElementById("titulo-setor").textContent =
+        "Setor não encontrado";
     }
   } catch (erro) {
     console.error("Erro ao carregar os cursos:", erro);
@@ -349,6 +439,12 @@ if (btnAddCursoSetor && modalNovoCurso) {
   btnAddCursoSetor.addEventListener("click", () => {
     document.getElementById("form-curso-local").reset();
     document.getElementById("modal-edit-index").value = "-1";
+
+    document.getElementById("container-videos").innerHTML = "";
+    document.getElementById("container-pdfs").innerHTML = "";
+    window.addLinhaVideo();
+    window.addLinhaPdf();
+
     document.querySelector(".modal-header h2").textContent = "Novo Treinamento";
     modalNovoCurso.style.display = "flex";
   });
@@ -364,28 +460,75 @@ if (btnAddCursoSetor && modalNovoCurso) {
   formCursoLocal.addEventListener("submit", async (e) => {
     e.preventDefault();
     const btnSalvar = document.getElementById("btn-salvar-modal");
-    const editIndex = parseInt(document.getElementById("modal-edit-index").value);
-    btnSalvar.textContent = "Salvando...";
+    const editIndex = parseInt(
+      document.getElementById("modal-edit-index").value,
+    );
+    btnSalvar.textContent = "A gravar...";
     btnSalvar.disabled = true;
 
     const parametrosDaURL = new URLSearchParams(window.location.search);
     const setorId = parametrosDaURL.get("setor");
 
-    let videoUrlBruta = document.getElementById("modal-video-url").value;
-    let videoUrlFinal = videoUrlBruta;
+    // === CAPTURA INFINITA DE VÍDEOS (COM EXTRATOR INTELIGENTE) ===
+    const arrayVideos = [];
+    document
+      .querySelectorAll("#container-videos .linha-dinamica")
+      .forEach((linha) => {
+        const nome = linha.querySelector(".video-nome").value.trim();
+        const urlBruta = linha.querySelector(".video-url").value.trim();
+        let urlFinal = urlBruta;
 
-    if (videoUrlBruta) {
-      const regexYT = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
-      const match = videoUrlBruta.match(regexYT);
-      if (match && match[1]) {
-        videoUrlFinal = `https://www.youtube.com/embed/${match[1]}`;
-      }
-    }
+        if (urlBruta) {
+          // 1. EXTRATOR DE IFRAME (SharePoint / OneDrive)
+          // Se o admin colar o código inteiro <iframe src="...">, pega apenas o link
+          if (urlBruta.toLowerCase().includes("<iframe")) {
+            const regexIframe = /src=["']([^"']+)["']/;
+            const matchIframe = urlBruta.match(regexIframe);
+            if (matchIframe && matchIframe[1]) {
+              urlFinal = matchIframe[1]; // Pega apenas o que está dentro do src="..."
+            }
+          }
+
+          // 2. CONVERSOR DO YOUTUBE
+          // Se for Youtube, converte para /embed/
+          const regexYT =
+            /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+          const matchYT = urlFinal.match(regexYT);
+          if (matchYT && matchYT[1]) {
+            urlFinal = `https://www.youtube.com/embed/${matchYT[1]}`;
+          }
+
+          arrayVideos.push({ titulo: nome || "Aula", url: urlFinal });
+        }
+      });
+
+    // === CAPTURA INFINITA DE PDFs (COM PROTEÇÃO) ===
+    const arrayPdfs = [];
+    document
+      .querySelectorAll("#container-pdfs .linha-dinamica")
+      .forEach((linha) => {
+        const nome = linha.querySelector(".pdf-nome").value.trim();
+        const urlBruta = linha.querySelector(".pdf-url").value.trim();
+        let urlFinal = urlBruta;
+
+        if (urlBruta) {
+          // EXTRATOR: Se alguém colar o código de iframe por engano, nós salvamos o sistema recortando só o link
+          if (urlBruta.toLowerCase().includes("<iframe")) {
+            const regexIframe = /src=["']([^"']+)["']/;
+            const matchIframe = urlBruta.match(regexIframe);
+            if (matchIframe && matchIframe[1]) {
+              urlFinal = matchIframe[1];
+            }
+          }
+
+          arrayPdfs.push({ titulo: nome || "Arquivo PDF", url: urlFinal });
+        }
+      });
 
     const novoCurso = {
       titulo: document.getElementById("modal-titulo").value,
-      videos: videoUrlFinal ? [{ titulo: document.getElementById("modal-video-nome").value || "Aula", url: videoUrlFinal }] : [],
-      pdfs: document.getElementById("modal-pdf-url").value ? [{ titulo: document.getElementById("modal-pdf-nome").value || "PDF", url: document.getElementById("modal-pdf-url").value }] : [],
+      videos: arrayVideos,
+      pdfs: arrayPdfs,
     };
 
     try {
@@ -401,12 +544,16 @@ if (btnAddCursoSetor && modalNovoCurso) {
 
       await updateDoc(setorRef, { cursos: listaCursos });
 
-      alert(editIndex === -1 ? "Treinamento adicionado com sucesso!" : "Treinamento atualizado com sucesso!");
+      alert(
+        editIndex === -1
+          ? "Treinamento adicionado com sucesso!"
+          : "Treinamento atualizado com sucesso!",
+      );
       modalNovoCurso.style.display = "none";
       window.carregarDetalhesSetor();
     } catch (error) {
-      console.error("Erro ao salvar:", error);
-      alert("Erro ao salvar o curso. Verifique sua conexão e permissões.");
+      console.error("Erro ao guardar:", error);
+      alert("Erro ao guardar o curso. Verifique as suas permissões.");
     } finally {
       btnSalvar.textContent = "Salvar Treinamento";
       btnSalvar.disabled = false;
@@ -421,7 +568,9 @@ if (btnAddCursoSetor && modalNovoCurso) {
 
       blocosDeCursos.forEach((bloco) => {
         const textoDoBloco = bloco.innerText.toLowerCase();
-        bloco.style.display = textoDoBloco.includes(termoPesquisado) ? "block" : "none";
+        bloco.style.display = textoDoBloco.includes(termoPesquisado)
+          ? "block"
+          : "none";
       });
     });
   }
@@ -454,7 +603,8 @@ window.alternarCurso = function (idCurso) {
 };
 
 function obterIdYoutube(url) {
-  const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+  const regex =
+    /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
   const match = url.match(regex);
   return match ? match[1] : null;
 }
@@ -462,7 +612,9 @@ function obterIdYoutube(url) {
 window.deletarCurso = async function (evento, setorId, indexDoCurso) {
   evento.stopPropagation();
 
-  const confirmacao = confirm("Tem certeza que deseja excluir este treinamento? Esta ação apagará o módulo permanentemente.");
+  const confirmacao = confirm(
+    "Tem certeza que deseja excluir este treinamento? Esta ação apagará o módulo permanentemente.",
+  );
   if (!confirmacao) return;
 
   try {
@@ -481,13 +633,12 @@ window.deletarCurso = async function (evento, setorId, indexDoCurso) {
     }
   } catch (error) {
     console.error("Erro ao excluir:", error);
-    alert("Erro ao excluir. Verifique sua conexão e tente novamente.");
+    alert("Erro ao excluir. Verifique a sua conexão e tente novamente.");
   }
 };
 
 window.prepararEdicao = async function (evento, setorId, index) {
   evento.stopPropagation();
-
   const docRef = doc(db, "setores", setorId);
   const docSnap = await getDoc(docRef);
 
@@ -495,19 +646,27 @@ window.prepararEdicao = async function (evento, setorId, index) {
     const curso = docSnap.data().cursos[index];
 
     document.getElementById("modal-titulo").value = curso.titulo;
-    document.getElementById("modal-video-nome").value = curso.videos[0]?.titulo || "";
-    document.getElementById("modal-video-url").value = curso.videos[0]?.url || "";
-    document.getElementById("modal-pdf-nome").value = curso.pdfs[0]?.titulo || "";
-    document.getElementById("modal-pdf-url").value = curso.pdfs[0]?.url || "";
-
     document.getElementById("modal-edit-index").value = index;
-    document.querySelector(".modal-header h2").textContent = "Editar Treinamento";
+
+    document.getElementById("container-videos").innerHTML = "";
+    document.getElementById("container-pdfs").innerHTML = "";
+
+    if (curso.videos && curso.videos.length > 0)
+      curso.videos.forEach((v) => window.addLinhaVideo(v.titulo, v.url));
+    else window.addLinhaVideo();
+
+    if (curso.pdfs && curso.pdfs.length > 0)
+      curso.pdfs.forEach((p) => window.addLinhaPdf(p.titulo, p.url));
+    else window.addLinhaPdf();
+
+    document.querySelector(".modal-header h2").textContent =
+      "Editar Treinamento";
     document.getElementById("modal-novo-curso").style.display = "flex";
   }
 };
 
 // ==========================================
-// --- LÓGICA DE PROGRESSO DO USUÁRIO ---
+// --- LÓGICA DE PROGRESSO DO UTILIZADOR ---
 // ==========================================
 const tagYoutube = document.createElement("script");
 tagYoutube.src = "https://www.youtube.com/iframe_api";
@@ -516,16 +675,18 @@ primeiraTag.parentNode.insertBefore(tagYoutube, primeiraTag);
 
 window.registrarProgresso = async function (idUnico) {
   if (!window.progressoUsuario) window.progressoUsuario = {};
-  if (window.progressoUsuario[idUnico]) return; 
+  if (window.progressoUsuario[idUnico]) return;
 
-  window.progressoUsuario[idUnico] = true; 
+  window.progressoUsuario[idUnico] = true;
   const email = auth.currentUser.email;
 
   try {
-    await setDoc(doc(db, "progresso", email), {
+    await setDoc(
+      doc(db, "progresso", email),
+      {
         [idUnico]: true,
       },
-      { merge: true }
+      { merge: true },
     );
     console.log("Progresso salvo com sucesso!");
   } catch (error) {

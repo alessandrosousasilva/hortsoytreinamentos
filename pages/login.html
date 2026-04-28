@@ -8,12 +8,27 @@
   <link rel="stylesheet" href="../style.css">
   <link rel="shortcut icon" type="imagex/png" href="/assets/icones/icon-livro.ico">
   <style>
+
     .container-login {
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      background-color: var(--fundo-pagina);
+      background: linear-gradient(-45deg, var(--fundo-pagina), rgba(0, 154, 80, 0.08), var(--fundo-card), rgba(0, 154, 80, 0.15));
+      background-size: 400% 400%;
+      animation: gradienteAnimado 12s ease infinite;
+    }
+
+    @keyframes gradienteAnimado {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
     }
 
     .caixa-login {
@@ -100,6 +115,7 @@
       display: none;
       font-weight: bold;
     }
+    
   </style>
 
 </head>

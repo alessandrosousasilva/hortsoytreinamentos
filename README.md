@@ -1,18 +1,21 @@
 # 🚀 JEE - Portal de Treinamentos Corporativos
 
-Plataforma web desenvolvida para centralizar, organizar e disponibilizar os treinamentos internos do Grupo JEE.
+Plataforma web desenvolvida para centralizar, organizar e disponibilizar os treinamentos internos do Grupo JEE (HortSoy).
 
 ## ✨ Funcionalidades
 
-* **Autenticação Segura:** Acesso exclusivamente para e-mails `@hortsoy.com.br`.
-* **Banco de Dados:** Todo o conteúdo é gerenciado via Firebase Firestore.
-* **Painel Admin:** Administradores podem adicionar, editar e excluir treinamento diretamente na tela do curso.
+* **Autenticação Segura:** Acesso para e-mails corporativos `@hortsoy.com.br`.
+* **Painel de Gestão (Admin):** Dashboard para administradores acompanharem o engajamento da equipe, com cálculo de progresso Global e por Setor, opção de limpar histórico de ex-colaboradores e exportação de relatórios para **Excel (.csv)**.
+* **Banco de Dados Serverless:** Todo o conteúdo de texto, estruturação de cursos e progresso dos usuários é gerenciado em tempo real via **Firebase Firestore**.
+* **Gestão de Conteúdo (CRUD In-Place):** Administradores podem adicionar, editar e excluir treinamentos diretamente na interface do curso.
+* **Módulos Dinâmicos:** Suporte para múltiplos vídeos e múltiplos PDFs dentro de um único bloco de treinamento.
 * **Rastreamento de Progresso (LMS):**
-  * Integração com a **YouTube IFrame API** para auditar a visualização e contabilizando a aula como concluída.
-  * Rastreamento de leitura dos materiais de apoio.
-  * Barra de progresso calculando a porcentagem.
-* **Hospedagem Leve (Nuvem):** Os PDFs e Vídeos agora são inseridos diretamente via links externos compartilhados (Google Drive, OneDrive, etc.).
-* **Interface Adaptável:** Alternância de tema (Light/Dark).
+  * Integração com a **YouTube IFrame API** para auditar a visualização, contabilizando a aula como concluída apenas após 75% de retenção de tela.
+  * Rastreamento de leitura dos materiais de apoio (PDFs) e vídeos internos (SharePoint).
+  * Barra de progresso visual calculando a porcentagem de conclusão.
+* **Hospedagem Leve na Nuvem:** Os arquivos pesados (PDFs e Vídeos) não ficam no repositório. São consumidos via streaming e links externos compartilhados (OneDrive, SharePoint, YouTube).
+* **Extrator Inteligente de Links:** O sistema higieniza automaticamente os links colados pelo administrador, convertendo Iframes complexos em URLs limpas.
+* **Interface Adaptável e Acessível:** Alternância de tema (Modo Claro / Modo Escuro) salva no cache do usuário, além de uma seção de FAQ (Tira Dúvidas) embutida na página inicial.
 
 ---
 
@@ -25,49 +28,52 @@ Plataforma web desenvolvida para centralizar, organizar e disponibilizar os trei
 3. **Painel de Edição:** No topo da lista de cursos, clique no botão verde **"+ Adicionar Treinamento"** (este botão só é visível para administradores).
 4. **Preenchimento do Formulário:**
    * **Título do Módulo:** O nome principal do agrupamento (Ex: *Módulo 1 - Introdução*).
-   * **Vídeos (Opcional):** Preencha o nome da aula e o link do vídeo (veja as regras de links abaixo).
-   * **PDFs (Opcional):** Preencha o nome do arquivo e o link de acesso.
-5. **Salvar:** Clique em "Salvar Treinamento". O banco de dados (Firestore) será atualizado.
+   * **Aulas (Vídeos):** Preencha o nome da aula e o link do vídeo. Você pode clicar em "+ Adicionar Vídeo" para colocar várias aulas no mesmo módulo.
+   * **Arquivos (PDFs):** Preencha o nome do arquivo e o link de acesso. Você pode adicionar múltiplos PDFs no mesmo módulo.
+5. **Salvar:** Clique em "Salvar Treinamento". O banco de dados (Firestore) será atualizado e a tela recarregará automaticamente.
 
 ----
 
 ### ⚠️ Regras para Links Externos (Vídeos e PDFs)
 
-Para manter a plataforma leve e sem custos de servidor, os arquivos pesados são gerenciados externamente. Siga estas regras ao preencher os formulários:
+Para manter a plataforma leve, rápida e sem custos com servidores de armazenamento, os arquivos são gerenciados por link no portal. 
 
 #### 🎥 Para Vídeos
-* **Vídeos do YouTube:** Você pode colar qualquer link padrão do YouTube. O sistema fará a conversão automática para o formato correto.
-* **Vídeos Internos (OneDrive / SharePoint):** Não use o botão de "Compartilhar" comum. 
-  1. Abra o vídeo no OneDrive.
+* **Vídeos do YouTube:** Você pode colar qualquer link padrão do YouTube na caixa. O sistema fará a conversão automática para o formato de incorporação (`/embed/`).
+* **Vídeos Internos (OneDrive / SharePoint):** 1. Abra o vídeo no OneDrive Corporativo.
   2. Clique em **"Compartilhar -> Código de inserção"**.
-  3. No código gerado (ex: `<iframe src="https://...">`), copie **apenas a URL** que está entre aspas `src`.
-  4. Cole essa URL no portal.
+  3. Pode **copiar o código inteiro** (o bloco gigante que começa com `<iframe...`) e colar na caixa de link do vídeo. Ao salvar, o sistema limpará o código sozinho e extrairá apenas a URL necessária!
 
 #### 📄 Para PDFs
-* Hospede o PDF no **Google Drive** ou no **OneDrive**.
-* Gere um link de compartilhamento que esteja como **"Qualquer pessoa com o link pode ver"** (ou restrito apenas para a organização).
-* Cole o link gerado".
+* Hospede o PDF no **SharePoint** ou **OneDrive** corporativo.
+* Clique em "Compartilhar" e copie o link direto.
 
 ---
----
+
 ## 🛠️ Tecnologias Utilizadas
 
 * **HTML5 & CSS3**
-* **JavaScript (Vanilla JS)** 
-* **Firebase Auth**
+* **JavaScript (Vanilla JS / ES6 Modules)** * **Firebase Authentication**
 * **Firebase Firestore**
 * **YouTube IFrame API**
+
+---
 
 ## 📂 Estrutura do Projeto
 
 ```text
 hortsoytreinamentos/
-├── index.html          # Página inicial (Dashboard de setores)
-├── cursos.html         # Página dinâmica para exibir os módulos do setor
-├── login.html          # Tela de autenticação corporativa
-├── style.css           # Estilos globais e componentes visuais
-├── app.js              # Lógica principal, rotas, Firebase, CRUD e LMS
-├── auth.js             # Script isolado para processamento de login
-└── assets/
-    ├── logos/          # Logomarcas (versões colorida e branca)
-    └── icones/         # Ícones gerais da interface
+├── index.html          # Página inicial (Dashboard de setores e FAQ)
+├── style.css           # Variáveis e estilos globais de toda a plataforma
+├── app.js              # Motor principal: Rotas, Firebase, CRUD, Tema e Progresso
+├── README.md           # Documentação técnica e manual do usuário
+├── pages/              # Telas secundárias do sistema
+│   ├── login.html      # Interface de autenticação e criação de conta corporativa
+│   ├── cursos.html     # Página dinâmica que renderiza os módulos do setor selecionado
+│   └── admin.html      # Painel de Gestão e exportação de relatórios
+├── js/                 # Scripts específicos e isolados
+│   ├── auth.js         # Lógica de validação de e-mail e persistência de login
+│   └── admin.js        # Lógica de cálculo do Dashboard, cruzamento de dados e exportador Excel
+└── assets/             # Arquivos estáticos
+    ├── logos/          # Identidade visual (Tema Claro e Escuro)
+    └── icones/         # Favicon e ícones gráficos auxiliares

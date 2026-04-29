@@ -134,7 +134,7 @@ if (formLogin) {
             setor: setorSelecionado,
             dataCadastro: new Date().toISOString(),
           });
-          window.location.href = "index.html";
+          window.location.href = "/index.html";
         })
         .catch((error) => {
           msgErro.style.display = "block";
